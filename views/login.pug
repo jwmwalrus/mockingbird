@@ -3,11 +3,15 @@ extends layout/login-layout.pug
 block content
     .loginContainer
         h1 Login
-        form(method="post")
+
+        form(method="POST")
             if errorMessage && errorMessage.length > 0
                 .alert.alert-danger.alert-dismissible.fade-in(role="alert")
                     p.errorMessage #{errorMessage}
-            input(type="text", name="logUsername", placeholder="Username or email", value=logUsername, required="")
-            input(type="password", name="logPassword", placeholder="Password", value=logPassword, required="")
+            // input(type="text", name="logUsername", placeholder="Username or email", value=logUsername, required="")
+            // input(type="password", name="logPassword", placeholder="Password", value=logPassword, required="")
+            input(type="text", name="logUsername", placeholder="Username or email", value="jwmwalrus", required="")
+            input(type="password", name="logPassword", placeholder="Password", value="qaz", required="")
             input(type="submit", value="Login")
+
         a(href="/register") Need an account? Register here.

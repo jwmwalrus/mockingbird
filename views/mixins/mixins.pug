@@ -1,0 +1,26 @@
+mixin createMockForm(userLoggedIn)
+    .mockFormContainer
+        .userImageContainer
+            img(src=userLoggedIn.profilePic, alt="User's profile picture")
+        .textareaContainer
+            textarea#mockTextarea(placeholer="What's happening?")
+            .buttonsContainer
+                button#submitMockBtn(disabled="") Mock
+
+mixin createReplyModal(userLoggedIn)
+    #replyModal.modal.fade(tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true")
+        .modal-dialog
+            .modal-content.bg-dark
+                .modal-header
+                    h5#replyModalLabel.modal-title Reply
+                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+                .modal-body
+                    #originalMockContainer
+                    .mockFormContainer
+                        .userImageContainer
+                            img(src=userLoggedIn.profilePic, alt="User's profile picture")
+                        .textareaContainer
+                            textarea#replyTextarea(placeholer="What do you want to say?")
+                .modal-footer
+                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
+                    button#submitReplyBtn.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply

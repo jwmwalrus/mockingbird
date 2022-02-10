@@ -3,7 +3,8 @@ extends layout/login-layout.pug
 block content
     .loginContainer
         h1 Register
-        form(id="registerForm", method="post" onSubmit="validateForm(event);")
+
+        form(id="registerForm", method="POST" onSubmit="validateForm(event);")
             if errorMessage && errorMessage.length > 0
                 .alert.alert-danger.alert-dismissible.fade-in(role="alert")
                     p.errorMessage #{errorMessage}
@@ -20,7 +21,6 @@ block content
         a(href="/login") Already have an account? Login here.
 
     script.
-
         function validateForm(e) {
             e.preventDefault();
 
