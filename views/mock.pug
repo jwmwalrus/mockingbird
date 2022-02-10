@@ -1,0 +1,14 @@
+extends layout/main-layout.pug
+
+block content
+    script.
+        window.sessionStorage.setItem('mockId', '!{mockId}')
+
+    .mocksContainer
+
+    +createReplyModal(userLoggedIn)
+
+
+block scripts
+    script(defer="", src="/js/mock.js?v=v0.1.0", type="module")
+

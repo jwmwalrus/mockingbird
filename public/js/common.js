@@ -96,17 +96,17 @@ const setMocOnReplyModal = (node, id) => {
     btn.disabled = true;
 };
 
-const createMockHtml = (mockData) => {
+const createMockHtml = (mockData, outstanding = false) => {
     if (!mockData) {
         console.error('There is no mock data to create HTML');
         return null;
     }
 
     const isRemock = mockData.remockData !== undefined;
-    const isReply = mockData.replyTo !== undefined;
+    const isReply = mockData.replyTo !== undefined && mockData.replyTo._id !== undefined;
 
     const remockedBy = isRemock ? mockData.mockedBy.username : null;
-    const replyTo = isReply ? mockData.replyTo.mockedBy.username : null;
+    const replyTo = isReply ? mockData.replyTo?.mockedBy.username : null;
 
     const data = isRemock ? mockData.remockData : mockData;
 
@@ -224,12 +224,56 @@ const createMockHtml = (mockData) => {
 
     const mock = document.createElement('div');
     mock.classList.add('mock');
+    if (outstanding) {
+        mock.classList.add('outstanding');
+    }
+    mock.onclick = (evt) => {
+        if (evt.target.tagName !== 'DIV') { return; }
+        window.location.href = '/mocks/' + data._id;
+    };
     mock.appendChild(action);
     mock.appendChild(main);
 
     btn1.onclick = () => { setMocOnReplyModal(mock.cloneNode(true), data._id); };
 
     return mock;
+};
+
+const outputMocks = (mocks, selector) => {
+    const parent = document.querySelector(selector);
+    parent.innerHTML = '';
+
+    if (mocks.length === 0) {
+        const noResults = document.createElement('span');
+        noResults.classList.add('noResults');
+        noResults.textContent = 'Nothing to show';
+
+        parent.appendChild(noResults);
+        return;
+    }
+
+    mocks.forEach((p) => {
+        const node = createMockHtml(p);
+        parent.append(node);
+    });
+};
+
+const outputMockWithReplies = (results, selector) => {
+    const parent = document.querySelector(selector);
+    parent.innerHTML = '';
+
+    if (results.replyTo) {
+        const node = createMockHtml(results.replyTo);
+        parent.append(node);
+    }
+
+    const node = createMockHtml(results.mock, true);
+    parent.append(node);
+
+    results.replies.forEach((p) => {
+        const node = createMockHtml(p);
+        parent.append(node);
+    });
 };
 
 const onTextareaInput = (evt, submitBtn) => {
@@ -303,5 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 export default {
     createMockHtml,
+    outputMocks,
+    outputMockWithReplies,
     timeElapsed,
 };

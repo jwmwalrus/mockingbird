@@ -27,11 +27,24 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const postId = req.params.id;
+    const mockId = req.params.id;
     try {
-        const mocks = await getMocks({ _id: postId });
-        const result = mocks.length > 0 ? mocks[0] : null;
-        res.status(200).send(result);
+        const mocks = await getMocks({ _id: mockId });
+        if (mocks.length > 0) {
+            const result = {
+                mock: mocks[0],
+            };
+
+            if (mocks[0].replyTo) {
+                result.replyTo = mocks[0].replyTo;
+            }
+
+            result.replies = await getMocks({ replyTo: mockId });
+
+            res.status(200).send(result);
+            return;
+        }
+        res.status(200).send(null);
     } catch (e) {
         console.error(e);
         res.status(500).send('Error getting data');

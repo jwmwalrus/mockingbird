@@ -161,6 +161,11 @@ button {
   flex-shrink: 0;
 }
 
+.mock.outstanding .mockBody,
+.mock.outstanding .mockFooter {
+  font-size: 23px;
+}
+
 .mainContentContainer {
   flex: 1;
   display: flex;
