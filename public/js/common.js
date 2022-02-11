@@ -40,9 +40,12 @@ const timeElapsed = (current, previous) => {
 
 const handleLikes = async (btn, mockData) => {
     try {
-        const res = await fetch(`/api/mocks/${mockData._id}/like`, {
-            method: 'PUT',
-        });
+        const res = await fetch(`/api/mocks/${mockData._id}/like`, { method: 'PUT' });
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+
         const mock = await res.json();
         const str = mock.likes.length > 0 ? mock.likes.length.toString() : '';
         const span = btn.querySelector('span');
@@ -63,9 +66,12 @@ const handleLikes = async (btn, mockData) => {
 
 const handleRemocks = async (btn, mockData) => {
     try {
-        const res = await fetch(`/api/mocks/${mockData._id}/remock`, {
-            method: 'POST',
-        });
+        const res = await fetch(`/api/mocks/${mockData._id}/remock`, { method: 'POST' });
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+
         const mock = await res.json();
         const str = mock.remockUsers.length > 0 ? mock.remockUsers.length.toString() : '';
         const span = btn.querySelector('span');
@@ -84,14 +90,19 @@ const handleRemocks = async (btn, mockData) => {
     }
 };
 
-const setMocOnReplyModal = (node, id) => {
+const setDeleteMockModal = (id) => {
+    const btn = document.querySelector('#deleteMockBtn');
+    btn.setAttribute('data-id', id.toString());
+};
+
+const setReplyMockModal = (node, id) => {
     const parent = document.querySelector('#originalMockContainer');
     parent.innerHTML = '';
     parent.append(node);
 
-    document.querySelector('#replyTextarea').value = '';
+    document.querySelector('#replyMockTextarea').value = '';
 
-    const btn = document.querySelector('#submitReplyBtn');
+    const btn = document.querySelector('#submitReplyMockBtn');
     btn.setAttribute('data-id', id.toString());
     btn.disabled = true;
 };
@@ -102,8 +113,8 @@ const createMockHtml = (mockData, outstanding = false) => {
         return null;
     }
 
-    const isRemock = mockData.remockData !== undefined;
-    const isReply = mockData.replyTo !== undefined && mockData.replyTo._id !== undefined;
+    const isRemock = !!mockData.remockData;
+    const isReply = mockData.replyTo && mockData.replyTo._id !== undefined;
 
     const remockedBy = isRemock ? mockData.mockedBy.username : null;
     const replyTo = isReply ? mockData.replyTo?.mockedBy.username : null;
@@ -127,7 +138,7 @@ const createMockHtml = (mockData, outstanding = false) => {
 
     const profileLink = document.createElement('a');
     profileLink.classList.add('displayName');
-    profileLink.href = '/profile/%{mockedBy.username}';
+    profileLink.href = `/profile/${mockedBy.username}`;
     profileLink.textContent = displayName;
 
     const username = document.createElement('span');
@@ -143,6 +154,15 @@ const createMockHtml = (mockData, outstanding = false) => {
     header.appendChild(profileLink);
     header.appendChild(username);
     header.appendChild(tstamp);
+    if (data.mockedBy._id === getUserLoggedIn()._id) {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+        deleteBtn.setAttribute('data-id', data._id);
+        deleteBtn.setAttribute('data-bs-toggle', 'modal');
+        deleteBtn.setAttribute('data-bs-target', '#deleteMockModal');
+        deleteBtn.onclick = () => { setDeleteMockModal(data._id); };
+        header.appendChild(deleteBtn);
+    }
 
     const bodyContent = document.createElement('span');
     const body = document.createElement('div');
@@ -154,7 +174,7 @@ const createMockHtml = (mockData, outstanding = false) => {
     const btn1c = document.createElement('div');
     btn1.innerHTML = '<i class="fas fa-comment"></i>';
     btn1.setAttribute('data-bs-toggle', 'modal');
-    btn1.setAttribute('data-bs-target', '#replyModal');
+    btn1.setAttribute('data-bs-target', '#replyMockModal');
     btn1c.classList.add('mockBtnContainer');
     btn1c.appendChild(btn1);
 
@@ -229,12 +249,12 @@ const createMockHtml = (mockData, outstanding = false) => {
     }
     mock.onclick = (evt) => {
         if (evt.target.tagName !== 'DIV') { return; }
-        window.location.href = '/mocks/' + data._id;
+        window.location.href = '/mock/' + data._id;
     };
     mock.appendChild(action);
     mock.appendChild(main);
 
-    btn1.onclick = () => { setMocOnReplyModal(mock.cloneNode(true), data._id); };
+    btn1.onclick = () => { setReplyMockModal(mock.cloneNode(true), data._id); };
 
     return mock;
 };
@@ -281,6 +301,24 @@ const onTextareaInput = (evt, submitBtn) => {
     submitBtn.disabled = value === '';
 };
 
+const deleteMock = async (btn) => {
+    const mockId = btn.getAttribute('data-id');
+    if (!mockId) {
+        console.error('The `data-id` attribute does not contain the id to delete mock');
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/mocks/${mockId}`, { method: 'DELETE' });
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 const submitMock = async (textarea, submitBtn) => {
     const data = {
         content: textarea.value,
@@ -299,10 +337,11 @@ const submitMock = async (textarea, submitBtn) => {
             },
             body: JSON.stringify(data),
         });
-
-        if (![200, 201].includes(res.status)) {
-            throw new Error(res.statusText);
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
         }
+
         const newMock = await res.json();
 
         if (newMock.replyTo) {
@@ -333,8 +372,8 @@ document.addEventListener('DOMContentLoaded', () => {
         submitMockBtn.onclick = async () => { await submitMock(mockTextarea, submitMockBtn); };
     }
 
-    const submitReplyBtn = document.getElementById('submitReplyBtn');
-    const replyTextarea = document.getElementById('replyTextarea');
+    const submitReplyBtn = document.getElementById('submitReplyMockBtn');
+    const replyTextarea = document.getElementById('replyMockTextarea');
 
     if (replyTextarea) {
         replyTextarea.oninput = (evt) => onTextareaInput(evt, submitReplyBtn);
@@ -342,6 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (submitReplyBtn) {
         submitReplyBtn.onclick = async () => { await submitMock(replyTextarea, submitReplyBtn); };
+    }
+
+    const deleteMockBtn = document.getElementById('deleteMockBtn');
+    if (deleteMockBtn) {
+        deleteMockBtn.onclick = async () => { await deleteMock(deleteMockBtn); };
     }
 });
 

@@ -7,12 +7,12 @@ mixin createMockForm(userLoggedIn)
             .buttonsContainer
                 button#submitMockBtn(disabled="") Mock
 
-mixin createReplyModal(userLoggedIn)
-    #replyModal.modal.fade(tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true")
+mixin createReplyMockModal(userLoggedIn)
+    #replyMockModal.modal.fade(tabindex="-1" aria-labelledby="replyMockModalLabel" aria-hidden="true")
         .modal-dialog
             .modal-content.bg-dark
                 .modal-header
-                    h5#replyModalLabel.modal-title Reply
+                    h5#replyMockModalLabel.modal-title Reply
                     button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
                 .modal-body
                     #originalMockContainer
@@ -20,7 +20,34 @@ mixin createReplyModal(userLoggedIn)
                         .userImageContainer
                             img(src=userLoggedIn.profilePic, alt="User's profile picture")
                         .textareaContainer
-                            textarea#replyTextarea(placeholer="What do you want to say?")
+                            textarea#replyMockTextarea(placeholer="What do you want to say?")
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                    button#submitReplyBtn.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply
+                    button#submitReplyMockBtn.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply
+
+mixin createDeleteMockModal()
+    #deleteMockModal.modal.fade(tabindex="-1" aria-labelledby="deleteMockModalLabel" aria-hidden="true")
+        .modal-dialog
+            .modal-content.bg-dark
+                .modal-header
+                    h5#deleteMockModalLabel.modal-title Delete Mock
+                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+                .modal-body
+                    p You won't be able to delete this
+                .modal-footer
+                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
+                    button#deleteMockBtn.btn.btn-primary(type="button" data-bs-dismiss="modal") Delete
+
+mixin createMockModals(userLoggedIn)
+    +createReplyMockModal(userLoggedIn)
+    +createDeleteMockModal()
+
+mixin createFollowButton(user, isFollowing)
+    - text = isFollowing ? 'Following' : 'Follow'
+    - buttonClass = isFollowing ? 'followButton following' : 'followButton'
+    button(class=buttonClass data-user=user._id) #{text}
+
+mixin createTab(name, href, isSelected)
+    - className = isSelected ? 'tab active' : 'tab'
+    a(href=href class=className)
+        span #{name}

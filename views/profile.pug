@@ -1,0 +1,45 @@
+extends layout/main-layout.pug
+
+block content
+    if !profileUser
+        p User not found
+    else
+        script.
+            window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
+            window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
+
+        .profileHeaderContainer
+            .coverPhotoContainer
+
+                .userImageContainer
+                    img(src=profileUser.profilePic, alt="User profile image")
+
+            .profileButtonsContainer
+                if profileUser._id != userLoggedIn._id
+                    a.profileButton(href=`/messages/${profileUser._id}`)
+                        i.fas.fa-envelope
+                    +createFollowButton(profileUser, false)
+            .userDetailContainer
+                span.displayName #{profileUser.firstName} #{profileUser.lastName}
+                span.username @#{profileUser.username}
+                span.description #{profileUser.description}
+
+                .followersContainer
+                    a(href="/profile/${profileUser.username}/following")
+                        span.value #{0}
+                        span Following
+                    a(href="/profile/${profileUser.username}/followers")
+                        span.value #{0}
+                        span Followers
+
+        .tabsContainer
+            +createTab('Mocks', `/profile/${profileUser.username}`, selectedTab != 'replies')
+            +createTab('Replies', `/profile/${profileUser.username}/replies`, selectedTab == 'replies')
+
+        .mocksContainer
+
+        +createMockModals(userLoggedIn)
+
+block scripts
+    script(defer="", src="/js/profile.js?v=v0.1.0", type="module")
+

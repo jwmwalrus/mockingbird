@@ -7,10 +7,13 @@ import session from 'express-session';
 import './database.js';
 import { requireLogin, postTrimmer } from './middleware.js';
 import loginRoutes from './routes/login.js';
-import mockRoutes from './routes/mocks.js';
 import registerRoutes from './routes/register.js';
 import logoutRoutes from './routes/logout.js';
+
 import mocksApiRoutes from './routes/api/mocks.js';
+
+import mockRoutes from './routes/mock.js';
+import profileRoutes from './routes/profile.js';
 
 const app = express();
 const port = 3003;
@@ -39,9 +42,11 @@ app.use(session({
 app.use('/login', loginRoutes);
 app.use('/register', registerRoutes);
 app.use('/logout', logoutRoutes);
-app.use('/mocks', requireLogin, mockRoutes);
 
 app.use('/api/mocks', mocksApiRoutes);
+
+app.use('/mock', requireLogin, mockRoutes);
+app.use('/profile', requireLogin, profileRoutes);
 
 app.get('/', requireLogin, (req, res) => {
     const payload = {

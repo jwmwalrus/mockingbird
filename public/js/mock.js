@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         const res = await fetch(`/api/mocks/${mockId}`);
-
-        if (![200, 201].includes(res.status)) {
-            throw new Error(res.statusText);
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
         }
+
         const results = await res.json();
         common.outputMockWithReplies(results, '.mocksContainer');
     } catch (e) {

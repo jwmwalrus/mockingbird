@@ -17,12 +17,18 @@ const getMocks = async (filter) => {
 };
 
 router.get('/', async (req, res) => {
+    const filter = req.query;
+    if (filter.isReply !== undefined) {
+        const isReply = filter.isReply === '1';
+        filter.replyTo = { $exists: isReply };
+        delete filter.isReply;
+    }
     try {
-        const mocks = await getMocks({});
+        const mocks = await getMocks(filter);
         res.status(200).send(mocks);
     } catch (e) {
         console.error(e);
-        res.status(500).send('Error getting data: ' + e.message);
+        res.status(400).send(e.message);
     }
 });
 
@@ -47,7 +53,7 @@ router.get('/:id', async (req, res) => {
         res.status(200).send(null);
     } catch (e) {
         console.error(e);
-        res.status(500).send('Error getting data');
+        res.status(400).send(e.message);
     }
 });
 
@@ -69,6 +75,37 @@ router.post('/', async (req, res) => {
         let newMock = await Mock.create(mockData);
         newMock = await User.populate(newMock, { path: 'mockedBy' });
         res.status(201).send(newMock);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
+router.post('/:id/remock', async (req, res) => {
+    const mockId = req.params.id;
+    const { user } = req.session;
+    const userId = user._id;
+
+    try {
+        const deletedMock = await Mock.findOneAndDelete({ mockedBy: userId, remockData: mockId });
+        const option = deletedMock ? '$pull' : '$addToSet';
+
+        let remock = deletedMock;
+        if (!remock) {
+            remock = await Mock.create({ mockedBy: userId, remockData: mockId });
+        }
+
+        req.session.user = await User.findByIdAndUpdate(
+            userId,
+            { [option]: { retweets: remock._id } },
+            { new: true },
+        );
+        const mock = await Mock.findByIdAndUpdate(
+            mockId,
+            { [option]: { remockUsers: userId } },
+            { new: true },
+        );
+        res.status(200).send(mock);
     } catch (e) {
         console.error(e);
         res.status(400).send(e.message);
@@ -101,31 +138,10 @@ router.put('/:id/like', async (req, res) => {
     }
 });
 
-router.post('/:id/remock', async (req, res) => {
-    const mockId = req.params.id;
-    const { user } = req.session;
-    const userId = user._id;
-
+router.delete('/:id', async (req, res) => {
     try {
-        const deletedMock = await Mock.findOneAndDelete({ mockedBy: userId, remockData: mockId });
-        const option = deletedMock ? '$pull' : '$addToSet';
-
-        let remock = deletedMock;
-        if (!remock) {
-            remock = await Mock.create({ mockedBy: userId, remockData: mockId });
-        }
-
-        req.session.user = await User.findByIdAndUpdate(
-            userId,
-            { [option]: { retweets: remock._id } },
-            { new: true },
-        );
-        const mock = await Mock.findByIdAndUpdate(
-            mockId,
-            { [option]: { remockUsers: userId } },
-            { new: true },
-        );
-        res.status(200).send(mock);
+        await Mock.findOneAndDelete(req.params.id);
+        res.sendStatus(204);
     } catch (e) {
         console.error(e);
         res.status(400).send(e.message);
