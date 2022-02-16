@@ -2,7 +2,9 @@ import common from './common.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const res = await fetch('/api/mocks');
+        const search = new URLSearchParams();
+        search.append('followingOnly', true);
+        const res = await fetch(`/api/mocks/?${search.toString()}`);
         if (!res.ok) {
             const msg = await res.text();
             throw new Error(`${res.statusText} - ${msg}`);

@@ -7,6 +7,8 @@ README.html
 .env.development.local
 .env.test.local
 .env.production.local
+/uploads/**/*.png
+/uploads/**/*.jpg
 
 # OSX leaves these everywhere on SMB shares
 ._*

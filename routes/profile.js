@@ -58,4 +58,26 @@ router.get('/:username/replies', async (req, res) => {
     }
 });
 
+router.get('/:username/following', async (req, res) => {
+    try {
+        const payload = await getPayload(req.params.username, req.session.user);
+        payload.selectedTab = 'following';
+        res.status(200).render('followersAndFollowing', payload);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
+router.get('/:username/followers', async (req, res) => {
+    try {
+        const payload = await getPayload(req.params.username, req.session.user);
+        payload.selectedTab = 'followers';
+        res.status(200).render('followersAndFollowing', payload);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
 export default router;

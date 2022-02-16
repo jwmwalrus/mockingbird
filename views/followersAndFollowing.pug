@@ -1,0 +1,20 @@
+extends layout/main-layout.pug
+
+block content
+    if !profileUser
+        p User not found
+    else
+        script.
+            window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
+            window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
+
+        .tabsContainer
+            +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab != 'followers')
+            +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
+
+        .resultsContainer
+
+block scripts
+    script(defer="", src="/js/followersAndFollowing.js?v=v0.1.0", type="module")
+
+

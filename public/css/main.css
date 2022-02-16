@@ -1,22 +1,22 @@
 :root {
-  --red: rgb(220, 34, 94);
-  --redBackground: rgb(220, 34, 94. 0.9);
-  --green: rgb(23, 191, 99);
-  --greeunBackground: rgba(23, 191, 99, 0.9);
-  --blue: #1FA2F1;
+  --red: rgb(220 34 94);
+  --redBackground: rgb(220 34 94 90%);
+  --green: rgb(23 191 99);
+  --greeunBackground: rgba(23 191 99 90%);
+  --blue: #1fa2f1;
   --blueLight: #9bd1f9;
-  --blueBackground: rgba(31, 162, 241, 0.4);
+  --blueBackground: rgba(31 162 241 40%);
   --buttonHoverBg: #d4edff;
-  --lightGrey: rgb(230, 236, 240);
+  --lightGrey: rgb(230 236 240);
   --spacing: 15px;
-  --greyText: rgb(101, 119, 134);
-  --greyBtnText:rgba(255, 255, 255, 0.66);
+  --greyText: rgb(101 119 134);
+  --greyBtnText: rgba(255 255 255 66%);
 }
 
 body {
   background-color: black;
   color: white;
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* padding-bottom: 0; */
 }
 
@@ -26,11 +26,13 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
 }
 
-select,input,textarea {
+select,
+input,
+textarea {
   background-color: black !important;
   border: 1px solid #ced4da !important;
   color: white !important;
@@ -38,6 +40,17 @@ select,input,textarea {
 
 a {
   color: inherit;
+}
+
+nav a {
+  display: flex;
+  padding: 10px;
+  font-size: 30px;
+  width: 55px;
+  height: 55px;
+  align-items: center;
+  justify-content: center;
+  color: #dedad6;
 }
 
 a:hover {
@@ -58,19 +71,21 @@ nav {
   height: 100%;
 }
 
-nav a {
-  display: flex;
-  padding: 10px;
-  font-size: 30px;
-  width: 55px;
-  height: 55px;
-  align-items: center;
-  justify-content: center;
-  color: #DEDAD6;
-}
-
 nav a.blue {
   color: var(--blue);
+}
+
+.mockHeader a,
+.mockHeader span {
+  padding-right: 5px;
+}
+
+.replyFlag a {
+  color: var(--blue);
+}
+
+.followersContainer a {
+  margin-right: 15px;
 }
 
 nav a:hover {
@@ -116,7 +131,12 @@ button {
 }
 
 .mockHeader {
-  display:flex;
+  display: flex;
+}
+
+.username,
+.date {
+  color: var(--greyText);
 }
 
 .mockHeader .date {
@@ -142,7 +162,7 @@ button {
 }
 
 .textareaContainer {
-  flex:1;
+  flex: 1;
   padding-left: var(--spacing);
 }
 
@@ -174,6 +194,11 @@ button {
   flex-shrink: 0;
 }
 
+.mockFooter {
+  display: flex;
+  align-items: center;
+}
+
 .mock.outstanding .mockBody,
 .mock.outstanding .mockFooter {
   font-size: 23px;
@@ -191,18 +216,8 @@ button {
   flex: 1;
 }
 
-.username,
-.date {
-  color: var(--greyText);
-}
-
 .displayName {
   font-weight: bold;
-}
-
-.mockFooter {
-  display: flex;
-  align-items: center;
 }
 
 .mockFooter .mockBtnContainer {
@@ -215,12 +230,7 @@ button {
 }
 
 .mockHeader a:hover {
-  text-declaration: underline;
-}
-
-.mockHeader a,
-.mockHeader span{
-  padding-right: 5px;
+  text-decoration: underline;
 }
 
 .mockBtnContainer button:hover {
@@ -235,7 +245,7 @@ button {
 
 .mockBtnContainer.red button:hover {
   color: var(--red);
-  color-background: var(--redBackground);
+  background-color: var(--redBackground);
 }
 
 .mockBtnContainer.green button.active {
@@ -244,7 +254,7 @@ button {
 
 .mockBtnContainer.green button:hover {
   color: var(--green);
-  color-background: var(--greenBackground);
+  background-color: var(--greenBackground);
 }
 
 .mockActionContainer {
@@ -270,18 +280,14 @@ button {
 
 .replyFlag {
   font-size: 13px;
-  margin-bottom:
-}
-
-.replyFlag a {
-  color: var(--blue);
+  margin-bottom: 5px;
 }
 
 .errorMessage {
   padding: var(--spacing);
 }
 
-.profileHeaderContainer .coverPhotoContainer {
+.profileHeaderContainer .coverPhotoSection {
   height: 180px;
   background-color: var(--blue);
   position: relative;
@@ -293,6 +299,15 @@ button {
   margin-left: var(--spacing);
   position: absolute;
   bottom: -66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coverPhotoContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profileHeaderContainer .userImageContainer img {
@@ -305,9 +320,7 @@ button {
   min-height: 66px;
 }
 
-.profileButton,
-.followButton {
-  /* border: 1px solid var(--blue); */
+.profileButton {
   color: var(--blue);
   font-weight: bold;
   padding: 5px 15px;
@@ -315,19 +328,38 @@ button {
   margin-left: var(--spacing);
 }
 
-.profileButton:hover,
-.followButton:hover {
+.profileButton:hover {
   color: var(--blue);
   background-color: var(--buttonHoverBg);
+  border-radius: 60px;
+}
+
+.followButton {
+  color: var(--blue);
+  font-weight: bold;
+  padding: 5px 15px;
+  display: inline-block;
+  margin-left: var(--spacing);
+}
+
+.followButton:hover {
+  color: #fff;
+  background-color: var(--blue);
   border-radius: 60px;
 }
 
 .followButton.following {
   background-color: var(--blue);
   color: #fff;
+  border-radius: 60px;
 }
 
-.profileHeaderContainer .userImageContainer {
+.followButton.following:hover {
+  color: var(--blue);
+  background-color: #000;
+}
+
+.profileHeaderContainer .userDetailsContainer {
   display: flex;
   flex-direction: column;
   padding: 0 var(--spacing);
@@ -340,10 +372,6 @@ button {
 
 .followersContainer span:not(.value) {
   color: var(--greyText);
-}
-
-.followersContainer a {
-  margin-right: 15px;
 }
 
 .followersContainer a:hover {
@@ -362,7 +390,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--greyText)
+  color: var(--greyText);
   font-weight: bold;
 }
 
@@ -374,4 +402,60 @@ button {
 .tab:hover {
   color: var(--blue);
   background-color: var(--blueBackground);
+}
+
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.resultsContainer .user {
+  padding: var(--spacing);
+  display: flex;
+  border-bottom: 1px solid var(--lightGrey);
+}
+
+.user .userDetailsContainer {
+  flex: 1;
+  padding: 0 var(--spacing);
+}
+
+.profilePictureButton,
+.coverPhotoButton {
+  position: absolute;
+  font-size: 30px;
+  color: rgba(0 0 0 40%);
+  display: none;
+}
+
+.userImageContainer:hover .profilePictureButton,
+.coverPhotoSection:hover .coverPhotoButton {
+  display: block;
+}
+
+.coverPhotoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#imagePreview,
+#coverPhotoPreview {
+  width: 100%;
+  display: block;
+  max-width: 100%;
+}
+
+.pinButton.active {
+  color: var(--blue);
+}
+
+.pinnedMockText {
+  font-size: 12px;
+  color: var(--greyText);
+}
+
+.pinnedMockContainer {
+  border-bottom: 10px solid rgb(230 236 240);
 }

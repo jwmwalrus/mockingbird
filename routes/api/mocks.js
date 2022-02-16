@@ -18,10 +18,25 @@ const getMocks = async (filter) => {
 
 router.get('/', async (req, res) => {
     const filter = req.query;
+    console.log({ filter });
     if (filter.isReply !== undefined) {
-        const isReply = filter.isReply === '1';
+        const isReply = filter.isReply === 'true';
         filter.replyTo = { $exists: isReply };
         delete filter.isReply;
+    }
+    if (filter.followingOnly !== undefined) {
+        const followingOnly = filter.followingOnly === 'true';
+
+        if (followingOnly) {
+            let objectIds = [];
+            if (req.session.user.following) {
+                objectIds = [...req.session.user.following];
+            }
+            objectIds.push(req.session.user._id);
+            filter.mockedBy = { $in: objectIds };
+        }
+
+        delete filter.followingOnly;
     }
     try {
         const mocks = await getMocks(filter);
@@ -132,6 +147,20 @@ router.put('/:id/like', async (req, res) => {
             { new: true },
         );
         res.status(200).send(mock);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    try {
+        if (req.body.pinned !== undefined && req.body.pinned) {
+            await Mock.updateMany({ mockedBy: req.session.user }, { pinned: false });
+        }
+
+        await Mock.findByIdAndUpdate(req.params.id, req.body);
+        res.sendStatus(204);
     } catch (e) {
         console.error(e);
         res.status(400).send(e.message);

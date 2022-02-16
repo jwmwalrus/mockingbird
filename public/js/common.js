@@ -1,3 +1,5 @@
+import Cropper from '../static/cropper.esm.js';
+
 const getUserLoggedIn = () => {
     const item = window.sessionStorage.getItem('userLoggedIn');
     if (!item) { return null; }
@@ -36,6 +38,35 @@ const timeElapsed = (current, previous) => {
     }
 
     return Math.round(elapsed / msPerYear) + ' years ago';
+};
+
+const handleFollows = async (btn) => {
+    const userId = btn.getAttribute('data-user');
+    try {
+        const res = await fetch(`/api/users/${userId}/follow`, { method: 'PUT' });
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+
+        const data = await res.json();
+        let diff = 1;
+        if (data.following.includes(userId)) {
+            btn.classList.add('following');
+            btn.innerText = 'Following';
+        } else {
+            btn.classList.remove('following');
+            btn.innerText = 'Follow';
+            diff = -1;
+        }
+
+        const label = document.getElementById('followersValue');
+        if (label) {
+            label.innerText = (Number(label.innerText) + diff).toString();
+        }
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 const handleLikes = async (btn, mockData) => {
@@ -91,23 +122,32 @@ const handleRemocks = async (btn, mockData) => {
 };
 
 const setDeleteMockModal = (id) => {
-    const btn = document.querySelector('#deleteMockBtn');
+    const btn = document.getElementById('deleteMockBtn');
     btn.setAttribute('data-id', id.toString());
 };
 
+const setPinMockModal = (id, pinned) => {
+    const btn = document.getElementById('pinMockBtn');
+    const label = document.getElementById('confirmPinModalLabel');
+    label.textContent = pinned ? 'Unpin this mock?' : 'Pin this mock?';
+    btn.textContent = pinned ? 'Unpin' : 'Pin';
+    btn.setAttribute('data-id', id.toString());
+    btn.setAttribute('data-pinval', pinned ? '0' : '1');
+};
+
 const setReplyMockModal = (node, id) => {
-    const parent = document.querySelector('#originalMockContainer');
+    const parent = document.getElementById('originalMockContainer');
     parent.innerHTML = '';
     parent.append(node);
 
-    document.querySelector('#replyMockTextarea').value = '';
+    document.getElementById('replyMockTextarea').value = '';
 
-    const btn = document.querySelector('#submitReplyMockBtn');
+    const btn = document.getElementById('submitReplyMockBtn');
     btn.setAttribute('data-id', id.toString());
     btn.disabled = true;
 };
 
-const createMockHtml = (mockData, outstanding = false) => {
+const createMockHtml = async (mockData, outstanding = false) => {
     if (!mockData) {
         console.error('There is no mock data to create HTML');
         return null;
@@ -155,12 +195,25 @@ const createMockHtml = (mockData, outstanding = false) => {
     header.appendChild(username);
     header.appendChild(tstamp);
     if (data.mockedBy._id === getUserLoggedIn()._id) {
+        const pinBtn = document.createElement('button');
+        pinBtn.innerHTML = '<i class="fas fa-thumbtack"></i>';
+        pinBtn.setAttribute('data-id', data._id);
+        pinBtn.setAttribute('data-bs-toggle', 'modal');
+        pinBtn.setAttribute('data-bs-target', '#confirmPinModal');
+        pinBtn.classList.add('pinButton');
+        if (data.pinned) {
+            pinBtn.classList.add('active');
+        }
+        pinBtn.onclick = () => { setPinMockModal(data._id, data.pinned); };
+
         const deleteBtn = document.createElement('button');
         deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
         deleteBtn.setAttribute('data-id', data._id);
         deleteBtn.setAttribute('data-bs-toggle', 'modal');
         deleteBtn.setAttribute('data-bs-target', '#deleteMockModal');
         deleteBtn.onclick = () => { setDeleteMockModal(data._id); };
+
+        header.appendChild(pinBtn);
         header.appendChild(deleteBtn);
     }
 
@@ -188,7 +241,7 @@ const createMockHtml = (mockData, outstanding = false) => {
     if (user && data.remockUsers.includes(user._id)) {
         btn2.classList.add('active');
     }
-    btn2.onclick = () => { handleRemocks(btn2, data); };
+    btn2.onclick = async () => { await handleRemocks(btn2, data); };
     btn2c.classList.add('mockBtnContainer', 'green');
     btn2c.appendChild(btn2);
 
@@ -202,7 +255,7 @@ const createMockHtml = (mockData, outstanding = false) => {
     if (user && data.likes.includes(user._id)) {
         btn3.classList.add('active');
     }
-    btn3.onclick = () => { handleLikes(btn3, data); };
+    btn3.onclick = async () => { await handleLikes(btn3, data); };
     btn3c.classList.add('mockBtnContainer', 'red');
     btn3c.appendChild(btn3);
 
@@ -214,6 +267,12 @@ const createMockHtml = (mockData, outstanding = false) => {
 
     const content = document.createElement('div');
     content.classList.add('mockContentContainer');
+    if (data.pinned) {
+        const pinnedText = document.createElement('div');
+        pinnedText.classList.add('pinnedMockText');
+        pinnedText.innerHTML = '<i class="fas fa-thumbtack"></i><span>Pinned mock</span>';
+        content.appendChild(pinnedText);
+    }
     content.appendChild(header);
     if (replyTo) {
         const replying = document.createElement('div');
@@ -259,6 +318,60 @@ const createMockHtml = (mockData, outstanding = false) => {
     return mock;
 };
 
+const createUserHtml = async (userData, showFollowButton = false) => {
+    const userLink = document.createElement('a');
+    userLink.href = `/profile/${userData.username}`;
+    userLink.textContent = `${userData.firstName} ${userData.lastName}`;
+
+    const username = document.createElement('span');
+    username.classList.add('username');
+    username.textContent = '@' + userData.username;
+
+    const header = document.createElement('div');
+    header.classList.add('header');
+    header.appendChild(userLink);
+    header.appendChild(username);
+
+    const details = document.createElement('div');
+    details.classList.add('userDetailsContainer');
+    details.appendChild(header);
+
+    const img = document.createElement('img');
+    img.src = userData.profilePic;
+    img.alt = 'User Picture';
+    const imgc = document.createElement('div');
+    imgc.classList.add('userImageContainer');
+    imgc.appendChild(img);
+
+    const user = document.createElement('div');
+    user.classList.add('user');
+    user.appendChild(imgc);
+    user.appendChild(details);
+
+    const userLoggedIn = getUserLoggedIn();
+    if (showFollowButton && userData._id !== userLoggedIn._id) {
+        const isFollowing = userLoggedIn.following
+            && userLoggedIn.following.includes(userData._id);
+
+        const followBtn = document.createElement('button');
+        followBtn.setAttribute('data-user', userData._id);
+        followBtn.textContent = isFollowing ? 'Following' : 'Follow';
+        followBtn.classList.add('followButton');
+        if (isFollowing) {
+            followBtn.classList.add('following');
+        }
+        followBtn.onclick = async () => { await handleFollows(followBtn); };
+
+        const followBtnc = document.createElement('div');
+        followBtnc.classList.add('followButtonContainer');
+        followBtnc.appendChild(followBtn);
+
+        user.appendChild(followBtnc);
+    }
+
+    return user;
+};
+
 const outputMocks = (mocks, selector) => {
     const parent = document.querySelector(selector);
     parent.innerHTML = '';
@@ -272,8 +385,8 @@ const outputMocks = (mocks, selector) => {
         return;
     }
 
-    mocks.forEach((p) => {
-        const node = createMockHtml(p);
+    mocks.forEach(async (m) => {
+        const node = await createMockHtml(m);
         parent.append(node);
     });
 };
@@ -290,8 +403,27 @@ const outputMockWithReplies = (results, selector) => {
     const node = createMockHtml(results.mock, true);
     parent.append(node);
 
-    results.replies.forEach((p) => {
-        const node = createMockHtml(p);
+    results.replies.forEach(async (m) => {
+        const node = await createMockHtml(m);
+        parent.append(node);
+    });
+};
+
+const outputUsers = (users, selector) => {
+    const parent = document.querySelector(selector);
+    parent.innerHTML = '';
+
+    if (users.length === 0) {
+        const noResults = document.createElement('span');
+        noResults.classList.add('noResults');
+        noResults.textContent = 'Nothing to show';
+
+        parent.appendChild(noResults);
+        return;
+    }
+
+    users.forEach(async (u) => {
+        const node = await createUserHtml(u, true);
         parent.append(node);
     });
 };
@@ -299,6 +431,31 @@ const outputMockWithReplies = (results, selector) => {
 const onTextareaInput = (evt, submitBtn) => {
     const value = evt.target.value.trim();
     submitBtn.disabled = value === '';
+};
+
+const pinMock = async (btn) => {
+    const mockId = btn.getAttribute('data-id');
+    const pinval = btn.getAttribute('data-pinval');
+    if (!mockId) {
+        console.error('The `data-id` attribute does not contain the id to pin mock');
+        return;
+    }
+
+    try {
+        console.log({ pinval, pinned: pinval === '1' });
+        const res = await fetch(`/api/mocks/${mockId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pinned: pinval === '1' }),
+        });
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+        window.location.reload();
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 const deleteMock = async (btn) => {
@@ -314,9 +471,61 @@ const deleteMock = async (btn) => {
             const msg = await res.text();
             throw new Error(`${res.statusText} - ${msg}`);
         }
+        window.location.reload();
     } catch (e) {
         console.error(e);
     }
+};
+
+const setUploadImage = ({
+    inputId, previewId, saveBtnId, resource, aspectRatio,
+}) => {
+    if (!inputId || !previewId || !saveBtnId || !resource) { return; }
+
+    const filePhoto = document.getElementById(inputId);
+    const imagePreview = document.getElementById(previewId);
+    const imageUploadBtn = document.getElementById(saveBtnId);
+    if (!filePhoto || !imagePreview || !imageUploadBtn) { return; }
+
+    let cropper;
+    filePhoto.onchange = (evt) => {
+        if (!evt.target.files || !evt.target.files[0]) { return; }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+            cropper = new Cropper(imagePreview, {
+                aspectRatio: aspectRatio || 1 / 1,
+                background: false,
+            });
+        };
+        reader.readAsDataURL(evt.target.files[0]);
+    };
+    imageUploadBtn.onclick = () => {
+        const canvas = cropper.getCroppedCanvas();
+        if (!canvas) {
+            console.error('Could not upload image. Please make sure it is an image file.');
+            return;
+        }
+
+        canvas.toBlob(async (blob) => {
+            const fd = new FormData();
+            fd.append('croppedImage', blob);
+            try {
+                const res = await fetch(resource, {
+                    method: 'POST',
+                    body: fd,
+                });
+                if (!res.ok) {
+                    const msg = res.text();
+                    throw new Error(`${res.statusText} - ${msg}`);
+                }
+                window.location.reload();
+            } catch (e) {
+                console.error(e);
+            }
+        });
+    };
 };
 
 const submitMock = async (textarea, submitBtn) => {
@@ -349,7 +558,7 @@ const submitMock = async (textarea, submitBtn) => {
             return;
         }
 
-        const node = createMockHtml(newMock);
+        const node = await createMockHtml(newMock);
         const parent = document.querySelector('.mocksContainer');
         parent.prepend(node);
 
@@ -383,15 +592,42 @@ document.addEventListener('DOMContentLoaded', () => {
         submitReplyBtn.onclick = async () => { await submitMock(replyTextarea, submitReplyBtn); };
     }
 
+    const pinMockBtn = document.getElementById('pinMockBtn');
+    if (pinMockBtn) {
+        pinMockBtn.onclick = async () => { await pinMock(pinMockBtn); };
+    }
+
     const deleteMockBtn = document.getElementById('deleteMockBtn');
     if (deleteMockBtn) {
         deleteMockBtn.onclick = async () => { await deleteMock(deleteMockBtn); };
     }
+
+    const followBtns = document.querySelectorAll('button.followButton');
+    followBtns.forEach((btn) => {
+        btn.onclick = async () => handleFollows(btn);
+    });
+
+    setUploadImage({
+        inputId: 'filePhoto',
+        previewId: 'imagePreview',
+        saveBtnId: 'imageUploadBtn',
+        resource: '/api/users/profilepicture',
+    });
+
+    setUploadImage({
+        inputId: 'coverPhoto',
+        previewId: 'coverPhotoPreview',
+        saveBtnId: 'coverPhotoUploadBtn',
+        resource: '/api/users/coverphoto',
+        aspectRatio: 16 / 9,
+    });
 });
 
 export default {
     createMockHtml,
+    getUserLoggedIn,
     outputMocks,
     outputMockWithReplies,
+    outputUsers,
     timeElapsed,
 };

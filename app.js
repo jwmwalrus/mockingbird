@@ -11,6 +11,7 @@ import registerRoutes from './routes/register.js';
 import logoutRoutes from './routes/logout.js';
 
 import mocksApiRoutes from './routes/api/mocks.js';
+import usersApiRoutes from './routes/api/users.js';
 
 import mockRoutes from './routes/mock.js';
 import profileRoutes from './routes/profile.js';
@@ -32,6 +33,12 @@ app.use(
     express.static(path.resolve('node_modules/bootstrap/dist')),
     express.static(path.resolve('node_modules/jquery/dist')),
     express.static(path.resolve('node_modules/@fortawesome/fontawesome-free')),
+    express.static(path.resolve('node_modules/cropperjs/dist')),
+    express.static(path.resolve('uploads/images')),
+);
+app.use(
+    '/uploads',
+    express.static(path.resolve('uploads')),
 );
 app.use(session({
     secret: process.env.SECRET,
@@ -44,6 +51,7 @@ app.use('/register', registerRoutes);
 app.use('/logout', logoutRoutes);
 
 app.use('/api/mocks', mocksApiRoutes);
+app.use('/api/users', usersApiRoutes);
 
 app.use('/mock', requireLogin, mockRoutes);
 app.use('/profile', requireLogin, profileRoutes);
