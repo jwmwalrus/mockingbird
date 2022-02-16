@@ -18,7 +18,6 @@ const getMocks = async (filter) => {
 
 router.get('/', async (req, res) => {
     const filter = req.query;
-    console.log({ filter });
     if (filter.isReply !== undefined) {
         const isReply = filter.isReply === 'true';
         filter.replyTo = { $exists: isReply };
@@ -37,6 +36,10 @@ router.get('/', async (req, res) => {
         }
 
         delete filter.followingOnly;
+    }
+    if (filter.search !== undefined) {
+        filter.content = { $regex: filter.search, $options: 'i' };
+        delete filter.search;
     }
     try {
         const mocks = await getMocks(filter);

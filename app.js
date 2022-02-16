@@ -15,6 +15,7 @@ import usersApiRoutes from './routes/api/users.js';
 
 import mockRoutes from './routes/mock.js';
 import profileRoutes from './routes/profile.js';
+import searchRoutes from './routes/search.js';
 
 const app = express();
 const port = 3003;
@@ -34,7 +35,6 @@ app.use(
     express.static(path.resolve('node_modules/jquery/dist')),
     express.static(path.resolve('node_modules/@fortawesome/fontawesome-free')),
     express.static(path.resolve('node_modules/cropperjs/dist')),
-    express.static(path.resolve('uploads/images')),
 );
 app.use(
     '/uploads',
@@ -55,6 +55,7 @@ app.use('/api/users', usersApiRoutes);
 
 app.use('/mock', requireLogin, mockRoutes);
 app.use('/profile', requireLogin, profileRoutes);
+app.use('/search', requireLogin, searchRoutes);
 
 app.get('/', requireLogin, (req, res) => {
     const payload = {

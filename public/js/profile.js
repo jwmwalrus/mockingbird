@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectedTab = window.sessionStorage.getItem('selectedTab');
 
     if (selectedTab !== 'replies') {
-        const search = new URLSearchParams();
-        search.append('mockedBy', profileUserId);
-        search.append('pinned', true);
+        const query = new URLSearchParams();
+        query.append('mockedBy', profileUserId);
+        query.append('pinned', true);
         try {
-            const res = await fetch(`/api/mocks?${search.toString()}`);
+            const res = await fetch(`/api/mocks?${query.toString()}`);
             if (!res.ok) {
                 const msg = await res.text();
                 throw new Error(`${res.statusText} - ${msg}`);
@@ -36,12 +36,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    const search = new URLSearchParams();
-    search.append('mockedBy', profileUserId);
-    search.append('isReply', selectedTab === 'replies');
+    const query = new URLSearchParams();
+    query.append('mockedBy', profileUserId);
+    query.append('isReply', selectedTab === 'replies');
 
     try {
-        const res = await fetch(`/api/mocks?${search.toString()}`);
+        const res = await fetch(`/api/mocks?${query.toString()}`);
         if (!res.ok) {
             const msg = await res.text();
             throw new Error(`${res.statusText} - ${msg}`);

@@ -1,0 +1,19 @@
+extends layout/main-layout.pug
+
+block content
+    .searchBarContainer
+        i.fas.fa-search
+        input#searchBox(type="text", name="searchBox", data-search=selectedTab, placeholder="Search for users or mocks")
+
+    .tabsContainer
+        +createTab('Mocks', `/search/mocks`, selectedTab != 'users')
+        +createTab('Users', `/search/users`, selectedTab == 'users')
+
+    .resultsContainer
+
+    +createMockModals(userLoggedIn)
+
+block scripts
+    script(defer="", src="/js/search.js", type="module")
+
+

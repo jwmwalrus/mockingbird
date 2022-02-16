@@ -8,11 +8,39 @@ import User from '../../schemas/User.js';
 const router = express.Router();
 
 const upload = multer({ dest: 'uploads/' });
+const getUsers = async (filter) => {
+    const results = await User.find(filter)
+        .populate('remocks')
+        .populate('following')
+        .populate('followers')
+        .sort({ createdAt: -1 });
+    return results;
+};
+
+router.get('/', async (req, res) => {
+    let filter = req.query;
+    if (filter.search !== undefined) {
+        filter = {
+            $or: [
+                { firstName: { $regex: filter.search, $options: 'i' } },
+                { lastName: { $regex: filter.search, $options: 'i' } },
+                { username: { $regex: filter.search, $options: 'i' } },
+            ],
+        };
+    }
+    try {
+        const user = await getUsers(filter);
+        res.status(200).send(user);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
 
 router.get('/:id/following', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('following');
-        res.status(200).send(user);
+        const users = await getUsers({ _id: req.params.id });
+        res.status(200).send(users.length > 0 ? users[0] : null);
     } catch (e) {
         console.error(e);
         res.status(400).send(e.message);
@@ -21,8 +49,8 @@ router.get('/:id/following', async (req, res) => {
 
 router.get('/:id/followers', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('followers');
-        res.status(200).send(user);
+        const users = await getUsers({ _id: req.params.id });
+        res.status(200).send(users.length > 0 ? users[0] : null);
     } catch (e) {
         console.error(e);
         res.status(400).send(e.message);

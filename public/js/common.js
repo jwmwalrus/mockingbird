@@ -391,16 +391,16 @@ const outputMocks = (mocks, selector) => {
     });
 };
 
-const outputMockWithReplies = (results, selector) => {
+const outputMockWithReplies = async (results, selector) => {
     const parent = document.querySelector(selector);
     parent.innerHTML = '';
 
     if (results.replyTo) {
-        const node = createMockHtml(results.replyTo);
+        const node = await createMockHtml(results.replyTo);
         parent.append(node);
     }
 
-    const node = createMockHtml(results.mock, true);
+    const node = await createMockHtml(results.mock, true);
     parent.append(node);
 
     results.replies.forEach(async (m) => {
@@ -442,7 +442,6 @@ const pinMock = async (btn) => {
     }
 
     try {
-        console.log({ pinval, pinned: pinval === '1' });
         const res = await fetch(`/api/mocks/${mockId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
