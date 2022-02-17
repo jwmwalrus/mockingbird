@@ -60,7 +60,7 @@ const handleFollows = async (btn) => {
             diff = -1;
         }
 
-        const label = document.getElementById('followersValue');
+        const label = document.getElementById('followers-value');
         if (label) {
             label.innerText = (Number(label.innerText) + diff).toString();
         }
@@ -122,13 +122,13 @@ const handleRemocks = async (btn, mockData) => {
 };
 
 const setDeleteMockModal = (id) => {
-    const btn = document.getElementById('deleteMockBtn');
+    const btn = document.getElementById('delete-mock-btn');
     btn.setAttribute('data-id', id.toString());
 };
 
 const setPinMockModal = (id, pinned) => {
-    const btn = document.getElementById('pinMockBtn');
-    const label = document.getElementById('confirmPinModalLabel');
+    const btn = document.getElementById('pin-mock-btn');
+    const label = document.getElementById('confirm-pin-modal-label');
     label.textContent = pinned ? 'Unpin this mock?' : 'Pin this mock?';
     btn.textContent = pinned ? 'Unpin' : 'Pin';
     btn.setAttribute('data-id', id.toString());
@@ -136,13 +136,13 @@ const setPinMockModal = (id, pinned) => {
 };
 
 const setReplyMockModal = (node, id) => {
-    const parent = document.getElementById('originalMockContainer');
+    const parent = document.getElementById('original-mock-container');
     parent.innerHTML = '';
     parent.append(node);
 
-    document.getElementById('replyMockTextarea').value = '';
+    document.getElementById('reply-mock-textarea').value = '';
 
-    const btn = document.getElementById('submitReplyMockBtn');
+    const btn = document.getElementById('submit-reply-mock-btn');
     btn.setAttribute('data-id', id.toString());
     btn.disabled = true;
 };
@@ -173,11 +173,11 @@ const createMockHtml = async (mockData, outstanding = false) => {
     const img = document.createElement('img');
     const imgc = document.createElement('div');
     img.src = mockedBy.profilePic;
-    imgc.classList.add('userImageContainer');
+    imgc.classList.add('user-image-container');
     imgc.appendChild(img);
 
     const profileLink = document.createElement('a');
-    profileLink.classList.add('displayName');
+    profileLink.classList.add('display-name');
     profileLink.href = `/profile/${mockedBy.username}`;
     profileLink.textContent = displayName;
 
@@ -190,7 +190,7 @@ const createMockHtml = async (mockData, outstanding = false) => {
     tstamp.textContent = timeElapsed(new Date(), new Date(data.createdAt));
 
     const header = document.createElement('div');
-    header.classList.add('mockHeader');
+    header.classList.add('mock-header');
     header.appendChild(profileLink);
     header.appendChild(username);
     header.appendChild(tstamp);
@@ -199,8 +199,8 @@ const createMockHtml = async (mockData, outstanding = false) => {
         pinBtn.innerHTML = '<i class="fas fa-thumbtack"></i>';
         pinBtn.setAttribute('data-id', data._id);
         pinBtn.setAttribute('data-bs-toggle', 'modal');
-        pinBtn.setAttribute('data-bs-target', '#confirmPinModal');
-        pinBtn.classList.add('pinButton');
+        pinBtn.setAttribute('data-bs-target', '#confirm-pin-modal');
+        pinBtn.classList.add('pin-button');
         if (data.pinned) {
             pinBtn.classList.add('active');
         }
@@ -210,7 +210,7 @@ const createMockHtml = async (mockData, outstanding = false) => {
         deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
         deleteBtn.setAttribute('data-id', data._id);
         deleteBtn.setAttribute('data-bs-toggle', 'modal');
-        deleteBtn.setAttribute('data-bs-target', '#deleteMockModal');
+        deleteBtn.setAttribute('data-bs-target', '#delete-mock-modal');
         deleteBtn.onclick = () => { setDeleteMockModal(data._id); };
 
         header.appendChild(pinBtn);
@@ -220,15 +220,15 @@ const createMockHtml = async (mockData, outstanding = false) => {
     const bodyContent = document.createElement('span');
     const body = document.createElement('div');
     bodyContent.textContent = data.content;
-    body.classList.add('mockBody');
+    body.classList.add('mock-body');
     body.appendChild(bodyContent);
 
     const btn1 = document.createElement('button');
     const btn1c = document.createElement('div');
     btn1.innerHTML = '<i class="fas fa-comment"></i>';
     btn1.setAttribute('data-bs-toggle', 'modal');
-    btn1.setAttribute('data-bs-target', '#replyMockModal');
-    btn1c.classList.add('mockBtnContainer');
+    btn1.setAttribute('data-bs-target', '#reply-mock-modal');
+    btn1c.classList.add('mock-btn-container');
     btn1c.appendChild(btn1);
 
     const btn2 = document.createElement('button');
@@ -237,12 +237,12 @@ const createMockHtml = async (mockData, outstanding = false) => {
         <i class="fas fa-retweet"></i>
         <span>${data.remockUsers.length || ''}</span>
     `;
-    btn2.classList.add('remockBtn');
+    btn2.classList.add('remock-btn');
     if (user && data.remockUsers.includes(user._id)) {
         btn2.classList.add('active');
     }
     btn2.onclick = async () => { await handleRemocks(btn2, data); };
-    btn2c.classList.add('mockBtnContainer', 'green');
+    btn2c.classList.add('mock-btn-container', 'green');
     btn2c.appendChild(btn2);
 
     const btn3 = document.createElement('button');
@@ -251,32 +251,32 @@ const createMockHtml = async (mockData, outstanding = false) => {
         <i class="fas fa-heart"></i>
         <span>${data.likes.length || ''}</span>
     `;
-    btn3.classList.add('likeBtn');
+    btn3.classList.add('like-btn');
     if (user && data.likes.includes(user._id)) {
         btn3.classList.add('active');
     }
     btn3.onclick = async () => { await handleLikes(btn3, data); };
-    btn3c.classList.add('mockBtnContainer', 'red');
+    btn3c.classList.add('mock-btn-container', 'red');
     btn3c.appendChild(btn3);
 
     const footer = document.createElement('div');
-    footer.classList.add('mockFooter');
+    footer.classList.add('mock-footer');
     footer.appendChild(btn1c);
     footer.appendChild(btn2c);
     footer.appendChild(btn3c);
 
     const content = document.createElement('div');
-    content.classList.add('mockContentContainer');
+    content.classList.add('mock-content-container');
     if (data.pinned) {
         const pinnedText = document.createElement('div');
-        pinnedText.classList.add('pinnedMockText');
+        pinnedText.classList.add('pinned-mock-text');
         pinnedText.innerHTML = '<i class="fas fa-thumbtack"></i><span>Pinned mock</span>';
         content.appendChild(pinnedText);
     }
     content.appendChild(header);
     if (replyTo) {
         const replying = document.createElement('div');
-        replying.classList.add('replyFlag');
+        replying.classList.add('reply-flag');
         replying.innerHTML = `
             Replying to <a href="/profile/${replyTo}">@${replyTo}</a>
         `;
@@ -286,12 +286,12 @@ const createMockHtml = async (mockData, outstanding = false) => {
     content.appendChild(footer);
 
     const main = document.createElement('div');
-    main.classList.add('mainContentContainer');
+    main.classList.add('main-content-container');
     main.appendChild(imgc);
     main.appendChild(content);
 
     const action = document.createElement('div');
-    action.classList.add('mockActionContainer');
+    action.classList.add('mock-action-container');
     if (remockedBy) {
         const remocker = document.createElement('span');
         remocker.innerHTML = `
@@ -333,14 +333,14 @@ const createUserHtml = async (userData, showFollowButton = false) => {
     header.appendChild(username);
 
     const details = document.createElement('div');
-    details.classList.add('userDetailsContainer');
+    details.classList.add('user-details-container');
     details.appendChild(header);
 
     const img = document.createElement('img');
     img.src = userData.profilePic;
     img.alt = 'User Picture';
     const imgc = document.createElement('div');
-    imgc.classList.add('userImageContainer');
+    imgc.classList.add('user-image-container');
     imgc.appendChild(img);
 
     const user = document.createElement('div');
@@ -356,14 +356,14 @@ const createUserHtml = async (userData, showFollowButton = false) => {
         const followBtn = document.createElement('button');
         followBtn.setAttribute('data-user', userData._id);
         followBtn.textContent = isFollowing ? 'Following' : 'Follow';
-        followBtn.classList.add('followButton');
+        followBtn.classList.add('follow-button');
         if (isFollowing) {
             followBtn.classList.add('following');
         }
         followBtn.onclick = async () => { await handleFollows(followBtn); };
 
         const followBtnc = document.createElement('div');
-        followBtnc.classList.add('followButtonContainer');
+        followBtnc.classList.add('follow-button-container');
         followBtnc.appendChild(followBtn);
 
         user.appendChild(followBtnc);
@@ -378,7 +378,7 @@ const outputMocks = (mocks, selector) => {
 
     if (mocks.length === 0) {
         const noResults = document.createElement('span');
-        noResults.classList.add('noResults');
+        noResults.classList.add('no-results');
         noResults.textContent = 'Nothing to show';
 
         parent.appendChild(noResults);
@@ -415,7 +415,7 @@ const outputUsers = (users, selector) => {
 
     if (users.length === 0) {
         const noResults = document.createElement('span');
-        noResults.classList.add('noResults');
+        noResults.classList.add('no-results');
         noResults.textContent = 'Nothing to show';
 
         parent.appendChild(noResults);
@@ -558,7 +558,7 @@ const submitMock = async (textarea, submitBtn) => {
         }
 
         const node = await createMockHtml(newMock);
-        const parent = document.querySelector('.mocksContainer');
+        const parent = document.querySelector('.mocks-container');
         parent.prepend(node);
 
         textarea.value = '';
@@ -569,8 +569,8 @@ const submitMock = async (textarea, submitBtn) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const submitMockBtn = document.getElementById('submitMockBtn');
-    const mockTextarea = document.getElementById('mockTextarea');
+    const submitMockBtn = document.getElementById('submit-mock-btn');
+    const mockTextarea = document.getElementById('mock-textarea');
 
     if (mockTextarea) {
         mockTextarea.oninput = (evt) => onTextareaInput(evt, submitMockBtn);
@@ -580,8 +580,8 @@ document.addEventListener('DOMContentLoaded', () => {
         submitMockBtn.onclick = async () => { await submitMock(mockTextarea, submitMockBtn); };
     }
 
-    const submitReplyBtn = document.getElementById('submitReplyMockBtn');
-    const replyTextarea = document.getElementById('replyMockTextarea');
+    const submitReplyBtn = document.getElementById('submit-reply-mock-btn');
+    const replyTextarea = document.getElementById('reply-mock-textarea');
 
     if (replyTextarea) {
         replyTextarea.oninput = (evt) => onTextareaInput(evt, submitReplyBtn);
@@ -591,12 +591,12 @@ document.addEventListener('DOMContentLoaded', () => {
         submitReplyBtn.onclick = async () => { await submitMock(replyTextarea, submitReplyBtn); };
     }
 
-    const pinMockBtn = document.getElementById('pinMockBtn');
+    const pinMockBtn = document.getElementById('pin-mock-btn');
     if (pinMockBtn) {
         pinMockBtn.onclick = async () => { await pinMock(pinMockBtn); };
     }
 
-    const deleteMockBtn = document.getElementById('deleteMockBtn');
+    const deleteMockBtn = document.getElementById('delete-mock-btn');
     if (deleteMockBtn) {
         deleteMockBtn.onclick = async () => { await deleteMock(deleteMockBtn); };
     }
@@ -607,16 +607,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     setUploadImage({
-        inputId: 'filePhoto',
-        previewId: 'imagePreview',
-        saveBtnId: 'imageUploadBtn',
+        inputId: 'file-photo',
+        previewId: 'image-preview',
+        saveBtnId: 'image-upload-btn',
         resource: '/api/users/profilepicture',
     });
 
     setUploadImage({
-        inputId: 'coverPhoto',
-        previewId: 'coverPhotoPreview',
-        saveBtnId: 'coverPhotoUploadBtn',
+        inputId: 'cover-photo',
+        previewId: 'cover-photo-preview',
+        saveBtnId: 'cover-photo-upload-btn',
         resource: '/api/users/coverphoto',
         aspectRatio: 16 / 9,
     });

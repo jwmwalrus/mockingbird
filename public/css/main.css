@@ -1,16 +1,16 @@
 :root {
   --red: rgb(220 34 94);
-  --redBackground: rgb(220 34 94 90%);
+  --red-background: rgb(220 34 94 90%);
   --green: rgb(23 191 99);
-  --greeunBackground: rgba(23 191 99 90%);
+  --greeun-background: rgba(23 191 99 90%);
   --blue: #1fa2f1;
-  --blueLight: #9bd1f9;
-  --blueBackground: rgba(31 162 241 40%);
-  --buttonHoverBg: #d4edff;
-  --lightGrey: rgb(230 236 240);
+  --blue-light: #9bd1f9;
+  --blue-background: rgba(31 162 241 40%);
+  --button-hover-bg: #d4edff;
+  --light-grey: rgb(230 236 240);
   --spacing: 15px;
-  --greyText: rgb(101 119 134);
-  --greyBtnText: rgba(255 255 255 66%);
+  --grey-text: rgb(101 119 134);
+  --grey-btn-text: rgba(255 255 255 66%);
 }
 
 body {
@@ -75,33 +75,58 @@ nav a.blue {
   color: var(--blue);
 }
 
-.mockHeader a,
-.mockHeader span {
-  padding-right: 5px;
-}
-
-.replyFlag a {
-  color: var(--blue);
-}
-
-.followersContainer a {
-  margin-right: 15px;
-}
-
 nav a:hover {
-  background-color: var(--buttonHoverBg);
+  background-color: var(--button-hover-bg);
   color: var(--blue);
   border-radius: 50%;
-}
-
-.wrapper > .row {
-  margin: 0;
 }
 
 button {
   background-color: transparent;
   border: none;
-  color: var(--greyBtnText);
+  color: var(--grey-btn-text);
+}
+
+/*
+ * main layout
+ */
+
+.main-section-container {
+  padding: 0;
+  border-left: 1px solid var(--light-grey);
+  border-right: 1px solid var(--light-grey);
+  display: flex;
+  flex-direction: column;
+}
+
+.title-container {
+  height: 53px;
+  padding: 0 var(--spacing);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--light-grey);
+  flex-shrink: 0;
+}
+
+.title-container h1 {
+  flex: 1;
+}
+
+/*
+ * mocks
+ */
+
+.mock-header a,
+.mock-header span {
+  padding-right: 5px;
+}
+
+.reply-flag a {
+  color: var(--blue);
+}
+
+.followers-container a {
+  margin-right: 15px;
 }
 
 .dark-mode {
@@ -109,71 +134,34 @@ button {
   color: white;
 }
 
-.mainSectionContainer {
-  padding: 0;
-  border-left: 1px solid var(--lightGrey);
-  border-right: 1px solid var(--lightGrey);
+.mock-header {
   display: flex;
-  flex-direction: column;
 }
 
-.titleContainer {
-  height: 53px;
-  padding: 0 var(--spacing);
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--lightGrey);
-  flex-shrink: 0;
-}
-
-.titleContainer h1 {
+.mock-header .date {
   flex: 1;
 }
 
-.mockHeader {
-  display: flex;
-}
-
-.username,
-.date {
-  color: var(--greyText);
-}
-
-.mockHeader .date {
-  flex: 1;
-}
-
-.mockFormContainer {
+.mock-form-container {
   display: flex;
   padding: var(--spacing);
-  border-bottom: 10px solid var(--lightGrey);
+  border-bottom: 10px solid var(--light-grey);
   flex-shrink: 0;
 }
 
-.userImageContainer {
-  width: 50px;
-  height: 50px;
-}
-
-.userImageContainer img {
-  width: 100%;
-  border-radius: 50%;
-  background-color: white;
-}
-
-.textareaContainer {
+.textarea-container {
   flex: 1;
   padding-left: var(--spacing);
 }
 
-.textareaContainer textarea {
+.textarea-container textarea {
   width: 100%;
   border: none;
   resize: none;
   font-size: 19px;
 }
 
-#submitMockBtn {
+#submit-mock-btn {
   background-color: var(--blue);
   color: white;
   border: none;
@@ -181,8 +169,8 @@ button {
   padding: 7px 15px;
 }
 
-#submitMockBtn:disabled {
-  background-color: var(--blueLight);
+#submit-mock-btn:disabled {
+  background-color: var(--blue-light);
 }
 
 .mock {
@@ -190,85 +178,77 @@ button {
   flex-direction: column;
   padding: var(--spacing);
   cursor: pointer;
-  border-bottom: 1px solid var(--lightGrey);
+  border-bottom: 1px solid var(--light-grey);
   flex-shrink: 0;
 }
 
-.mockFooter {
+.mock-footer {
   display: flex;
   align-items: center;
 }
 
-.mock.outstanding .mockBody,
-.mock.outstanding .mockFooter {
+.mock.outstanding .mock-body,
+.mock.outstanding .mock-footer {
   font-size: 23px;
 }
 
-.mainContentContainer {
+.main-content-container {
   flex: 1;
   display: flex;
 }
 
-.mockContentContainer {
+.mock-content-container {
   padding-left: var(--spacing);
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.displayName {
-  font-weight: bold;
-}
-
-.mockFooter .mockBtnContainer {
+.mock-footer .mock-btn-container {
   flex: 1;
   display: flex;
 }
 
-.mockFooter .mockBtnContainer button {
+.mock-footer .mock-btn-container button {
   padding: 0 5px;
 }
 
-.mockHeader a:hover {
+.mock-header a:hover {
   text-decoration: underline;
 }
 
-.mockBtnContainer button:hover {
+.mock-btn-container button:hover {
   background-color: #d4edff;
   color: var(--blue);
   border-radius: 50%;
 }
 
-.mockBtnContainer.red button.active {
+.mock-btn-container.red button.active {
   color: var(--red);
 }
 
-.mockBtnContainer.red button:hover {
+.mock-btn-container.red button:hover {
   color: var(--red);
-  background-color: var(--redBackground);
+  background-color: var(--red-background);
 }
 
-.mockBtnContainer.green button.active {
+.mock-btn-container.green button.active {
   color: var(--green);
 }
 
-.mockBtnContainer.green button:hover {
+.mock-btn-container.green button:hover {
   color: var(--green);
-  background-color: var(--greenBackground);
+  background-color: var(--green-background);
 }
 
-.mockActionContainer {
+.mock-action-container {
   padding-left: 35px;
   font-size: 13px;
-  color: var(--greyText);
+  color: var(--grey-text);
   margin-bottom: 5px;
 }
 
-.modal-header .btn-close {
-  color: white;
-}
-
-.modal .mockFormContainer {
+.modal .mock-form-container {
   border: none;
   padding: 0;
   padding-top: var(--spacing);
@@ -278,22 +258,22 @@ button {
   padding: 0 0 var(--spacing) 0;
 }
 
-.replyFlag {
+.reply-flag {
   font-size: 13px;
   margin-bottom: 5px;
 }
 
-.errorMessage {
-  padding: var(--spacing);
-}
+/*
+ * profile
+ */
 
-.profileHeaderContainer .coverPhotoSection {
+.profile-header-container .cover-photo-section {
   height: 180px;
   background-color: var(--blue);
   position: relative;
 }
 
-.profileHeaderContainer .userImageContainer {
+.profile-header-container .user-image-container {
   height: 132px;
   width: 132px;
   margin-left: var(--spacing);
@@ -304,23 +284,23 @@ button {
   justify-content: center;
 }
 
-.coverPhotoContainer img {
+.cover-photo-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.profileHeaderContainer .userImageContainer img {
+.profile-header-container .user-image-container img {
   border: 4px solid #fff;
 }
 
-.profileHeaderContainer .profileButtonsContainer {
+.profile-header-container .profile-buttons-container {
   text-align: right;
   padding: var(--spacing);
   min-height: 66px;
 }
 
-.profileButton {
+.profile-button {
   color: var(--blue);
   font-weight: bold;
   padding: 5px 15px;
@@ -328,59 +308,146 @@ button {
   margin-left: var(--spacing);
 }
 
-.profileButton:hover {
+.profile-button:hover {
   color: var(--blue);
-  background-color: var(--buttonHoverBg);
+  background-color: var(--button-hover-bg);
   border-radius: 60px;
 }
 
-.followButton {
-  color: var(--blue);
-  font-weight: bold;
-  padding: 5px 15px;
-  display: inline-block;
-  margin-left: var(--spacing);
-}
-
-.followButton:hover {
-  color: #fff;
-  background-color: var(--blue);
-  border-radius: 60px;
-}
-
-.followButton.following {
-  background-color: var(--blue);
-  color: #fff;
-  border-radius: 60px;
-}
-
-.followButton.following:hover {
-  color: var(--blue);
-  background-color: #000;
-}
-
-.profileHeaderContainer .userDetailsContainer {
+.profile-header-container .user-details-container {
   display: flex;
   flex-direction: column;
   padding: 0 var(--spacing);
 }
 
-.followersContainer .value {
+.followers-container .value {
   font-weight: bold;
   margin-right: 5px;
 }
 
-.followersContainer span:not(.value) {
-  color: var(--greyText);
+.followers-container span:not(.value) {
+  color: var(--grey-text);
 }
 
-.followersContainer a:hover {
+.followers-container a:hover {
   border-bottom: 1px solid #fff;
 }
 
-.tabsContainer {
+.user .user-details-container {
+  flex: 1;
+  padding: 0 var(--spacing);
+}
+
+.profile-picture-button,
+.cover-photo-button {
+  position: absolute;
+  font-size: 30px;
+  color: rgba(0 0 0 40%);
+  display: none;
+}
+
+.user-image-container:hover .profile-picture-button,
+.cover-photo-section:hover .cover-photo-button {
+  display: block;
+}
+
+.cover-photo-container {
   display: flex;
-  border-bottom: 1px solid var(--lightGrey);
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/*
+ * search
+ */
+
+.search-bar-container {
+  position: relative;
+  color: var(--grey-text);
+  padding: 10px var(--spacing);
+}
+
+.search-bar-container .fa-search {
+  position: absolute;
+  top: 20px;
+  left: 28px;
+}
+
+.search-bar-container #search-box {
+  height: 36px;
+  width: 100%;
+  padding: 5px 15px 5px 40px;
+  border-radius: 50px;
+  background-color: var(--light-grey);
+  border: none;
+  color: var(--grey-text);
+}
+
+/*
+ * common
+ */
+
+.wrapper > .row {
+  margin: 0;
+}
+
+.username,
+.date {
+  color: var(--grey-text);
+}
+
+.user-image-container {
+  width: 50px;
+  height: 50px;
+}
+
+.user-image-container img {
+  width: 100%;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.display-name {
+  font-weight: bold;
+}
+
+.error-message {
+  padding: var(--spacing);
+}
+
+.modal-header .btn-close {
+  color: white;
+}
+
+.follow-button {
+  color: var(--blue);
+  font-weight: bold;
+  padding: 5px 15px;
+  display: inline-block;
+  margin-left: var(--spacing);
+}
+
+.follow-button:hover {
+  color: #fff;
+  background-color: var(--blue);
+  border-radius: 60px;
+}
+
+.follow-button.following {
+  background-color: var(--blue);
+  color: #fff;
+  border-radius: 60px;
+}
+
+.follow-button.following:hover {
+  color: var(--blue);
+  background-color: #000;
+}
+
+.tabs-container {
+  display: flex;
+  border-bottom: 1px solid var(--light-grey);
   flex-shrink: 0;
 }
 
@@ -390,7 +457,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--greyText);
+  color: var(--grey-text);
   font-weight: bold;
 }
 
@@ -401,83 +468,36 @@ button {
 
 .tab:hover {
   color: var(--blue);
-  background-color: var(--blueBackground);
+  background-color: var(--blue-background);
 }
 
-.resultsContainer {
+.results-container {
   display: flex;
   flex-direction: column;
 }
 
-.resultsContainer .user {
+.results-container .user {
   padding: var(--spacing);
   display: flex;
-  border-bottom: 1px solid var(--lightGrey);
+  border-bottom: 1px solid var(--light-grey);
 }
 
-.user .userDetailsContainer {
-  flex: 1;
-  padding: 0 var(--spacing);
-}
-
-.profilePictureButton,
-.coverPhotoButton {
-  position: absolute;
-  font-size: 30px;
-  color: rgba(0 0 0 40%);
-  display: none;
-}
-
-.userImageContainer:hover .profilePictureButton,
-.coverPhotoSection:hover .coverPhotoButton {
-  display: block;
-}
-
-.coverPhotoContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-#imagePreview,
-#coverPhotoPreview {
+#image-preview,
+#cover-photo-preview {
   width: 100%;
   display: block;
   max-width: 100%;
 }
 
-.pinButton.active {
+.pin-button.active {
   color: var(--blue);
 }
 
-.pinnedMockText {
+.pinned-mock-text {
   font-size: 12px;
-  color: var(--greyText);
+  color: var(--grey-text);
 }
 
-.pinnedMockContainer {
+.pinned-mock-container {
   border-bottom: 10px solid rgb(230 236 240);
-}
-
-.searchBarContainer {
-  position: relative;
-  color: var(--greyText);
-  padding: 10px var(--spacing);
-}
-
-.searchBarContainer .fa-search {
-  position: absolute;
-  top: 20px;
-  left: 28px;
-}
-
-.searchBarContainer #searchBox {
-  height: 36px;
-  width: 100%;
-  padding: 5px 15px 5px 40px;
-  border-radius: 50px;
-  background-color: var(--lightGrey);
-  border: none;
-  color: var(--greyText);
 }

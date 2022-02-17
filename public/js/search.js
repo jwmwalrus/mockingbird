@@ -15,9 +15,9 @@ const doSearch = async (value, searchType) => {
 
         const results = await res.json();
         if (endpoint === 'users') {
-            common.outputUsers(results, '.resultsContainer');
+            common.outputUsers(results, '.results-container');
         } else {
-            common.outputMocks(results, '.resultsContainer');
+            common.outputMocks(results, '.results-container');
         }
     } catch (e) {
         console.error(e);
@@ -25,8 +25,8 @@ const doSearch = async (value, searchType) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const searchBox = document.getElementById('searchBox');
-    const container = document.querySelector('.resultsContainer');
+    const searchBox = document.getElementById('search-box');
+    const container = document.querySelector('.results-container');
     const searchType = searchBox.getAttribute('data-search');
     searchBox.onkeyup = (evt) => {
         clearTimeout(timer);

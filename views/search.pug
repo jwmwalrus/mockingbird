@@ -1,15 +1,15 @@
 extends layout/main-layout.pug
 
 block content
-    .searchBarContainer
+    .search-bar-container
         i.fas.fa-search
-        input#searchBox(type="text", name="searchBox", data-search=selectedTab, placeholder="Search for users or mocks")
+        input#search-box(type="text", name="searchBox", data-search=selectedTab, placeholder="Search for users or mocks")
 
-    .tabsContainer
+    .tabs-container
         +createTab('Mocks', `/search/mocks`, selectedTab != 'users')
         +createTab('Users', `/search/users`, selectedTab == 'users')
 
-    .resultsContainer
+    .results-container
 
     +createMockModals(userLoggedIn)
 

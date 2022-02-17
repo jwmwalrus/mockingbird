@@ -2,8 +2,6 @@
   "extends": "stylelint-config-standard",
   "rules": {
     "comment-empty-line-before": null,
-    "custom-property-pattern": null,
-    "selector-class-pattern": null,
-    "selector-id-pattern": null
+    "no-descending-specificity": null
   }
 }

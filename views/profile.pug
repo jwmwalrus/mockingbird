@@ -11,26 +11,26 @@ block content
         - followersCount = profileUser.followers ? profileUser.followers.length : 0
         - followingCount = profileUser.following ? profileUser.following.length : 0
 
-        .profileHeaderContainer
-            .coverPhotoSection
-                .coverPhotoContainer
+        .profile-header-container
+            .cover-photo-section
+                .cover-photo-container
                     if profileUser.coverPhoto
                         img(src=profileUser.coverPhoto, alt="User's cover photo")
 
                     if profileUser._id == userLoggedIn._id
-                        button.coverPhotoButton(data-bs-toggle="modal", data-bs-target="#coverPhotoUploadModal")
+                        button.cover-photo-button(data-bs-toggle="modal", data-bs-target="#cover-photo-upload-modal")
                             i.fas.fa-camera
 
-                .userImageContainer
+                .user-image-container
                     img(src=profileUser.profilePic, alt="User's profile image")
 
                     if profileUser._id == userLoggedIn._id
-                        button.profilePictureButton(data-bs-toggle="modal", data-bs-target="#imageUploadModal")
+                        button.profile-picture-button(data-bs-toggle="modal", data-bs-target="#image-upload-modal")
                             i.fas.fa-camera
 
-            .profileButtonsContainer
+            .profile-buttons-container
                 if profileUser._id != userLoggedIn._id
-                    a.profileButton(href=`/messages/${profileUser._id}`)
+                    a.profile-button(href=`/messages/${profileUser._id}`)
                         i.fas.fa-envelope
 
                     - const profileUserId = profileUser._id.toString()
@@ -38,26 +38,26 @@ block content
                         +createFollowButton(profileUser, true)
                     - else
                         +createFollowButton(profileUser, false)
-            .userDetailContainer
-                span.displayName #{profileUser.firstName} #{profileUser.lastName}
+            .user-detail-container
+                span.display-name #{profileUser.firstName} #{profileUser.lastName}
                 span.username @#{profileUser.username}
                 span.description #{profileUser.description}
 
-                .followersContainer
+                .followers-container
                     a(href=`/profile/${profileUser.username}/following`)
                         span.value #{followingCount}
                         span Following
                     a(href=`/profile/${profileUser.username}/followers`)
-                        span#followersValue.value #{followersCount}
+                        span#followers-value.value #{followersCount}
                         span Followers
 
-        .tabsContainer
+        .tabs-container
             +createTab('Mocks', `/profile/${profileUser.username}`, selectedTab != 'replies')
             +createTab('Replies', `/profile/${profileUser.username}/replies`, selectedTab == 'replies')
 
-        .pinnedMockContainer
+        .pinned-mock-container
 
-        .mocksContainer
+        .mocks-container
 
         +createMockModals(userLoggedIn)
         +createImageUploadModal()

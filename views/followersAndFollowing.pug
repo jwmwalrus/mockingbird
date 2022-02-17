@@ -8,11 +8,11 @@ block content
             window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
             window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
 
-        .tabsContainer
+        .tabs-container
             +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab != 'followers')
             +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
 
-        .resultsContainer
+        .results-container
 
 block scripts
     script(defer="", src="/js/followersAndFollowing.js?v=v0.1.0", type="module")

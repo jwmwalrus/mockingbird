@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const mocks = await res.json();
-        common.outputMocks(mocks, '.mocksContainer');
+        common.outputMocks(mocks, '.mocks-container');
     } catch (e) {
         console.error(e);
     }

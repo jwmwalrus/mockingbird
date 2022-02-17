@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const user = await res.json();
-        common.outputUsers(user[selectedTab], '.resultsContainer');
+        common.outputUsers(user[selectedTab], '.results-container');
     } catch (e) {
         console.error(e);
     }
