@@ -5,7 +5,7 @@ mixin createMockForm(userLoggedIn)
         .textarea-container
             textarea#mock-textarea(placeholer="What's happening?")
             .buttons-container
-                button#submit-mock-btn(disabled="") Mock
+                button#submit-mock-button(disabled="") Mock
 
 mixin createReplyMockModal(userLoggedIn)
     #reply-mock-modal.modal.fade(tabindex="-1" aria-labelledby="reply-mock-modal-label" aria-hidden="true")
@@ -23,7 +23,7 @@ mixin createReplyMockModal(userLoggedIn)
                             textarea#reply-mock-textarea(placeholer="What do you want to say?")
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                    button#submit-reply-mock-btn.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply
+                    button#submit-reply-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply
 
 mixin createDeleteMockModal()
     #delete-mock-modal.modal.fade(tabindex="-1" aria-labelledby="delete-mock-modal-label" aria-hidden="true")
@@ -36,7 +36,7 @@ mixin createDeleteMockModal()
                     p Are you sure you want to delete this?
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                    button#delete-mock-btn.btn.btn-primary(type="button" data-bs-dismiss="modal") Delete
+                    button#delete-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Delete
 
 mixin createMockModals(userLoggedIn)
     +createReplyMockModal(userLoggedIn)
@@ -68,7 +68,7 @@ mixin createImageUploadModal()
 
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
-                    button#image-upload-btn.btn.btn-primary(type="button") Save
+                    button#image-upload-button.btn.btn-primary(type="button") Save
 
 mixin createCoverPhotoUploadModal()
     #cover-photo-upload-modal.modal.fade(tabindex="-1" aria-labelledby="cover-photo-upload-modal-label" aria-hidden="true")
@@ -85,7 +85,7 @@ mixin createCoverPhotoUploadModal()
 
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
-                    button#cover-photo-upload-btn.btn.btn-primary(type="button") Save
+                    button#cover-photo-upload-button.btn.btn-primary(type="button") Save
 
 mixin createPinMockUploadModal()
     #confirm-pin-modal.modal.fade(tabindex="-1" aria-labelledby="confirm-pin-modal-label" aria-hidden="true")
@@ -99,4 +99,4 @@ mixin createPinMockUploadModal()
 
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
-                    button#pin-mock-btn.btn.btn-primary(type="button" data-bs-dismiss="modal") Pin
+                    button#pin-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Pin

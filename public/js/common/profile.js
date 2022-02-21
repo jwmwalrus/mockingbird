@@ -55,14 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setUploadImage({
         inputId: 'file-photo',
         previewId: 'image-preview',
-        saveBtnId: 'image-upload-btn',
+        saveBtnId: 'image-upload-button',
         resource: '/api/users/profilepicture',
     });
 
     setUploadImage({
         inputId: 'cover-photo',
         previewId: 'cover-photo-preview',
-        saveBtnId: 'cover-photo-upload-btn',
+        saveBtnId: 'cover-photo-upload-button',
         resource: '/api/users/coverphoto',
         aspectRatio: 16 / 9,
     });

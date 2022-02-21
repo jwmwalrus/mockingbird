@@ -53,12 +53,12 @@ const handleRemocks = async (btn, mockData) => {
 };
 
 const setDeleteMockModal = (id) => {
-    const btn = document.getElementById('delete-mock-btn');
+    const btn = document.getElementById('delete-mock-button');
     btn.setAttribute('data-id', id.toString());
 };
 
 const setPinMockModal = (id, pinned) => {
-    const btn = document.getElementById('pin-mock-btn');
+    const btn = document.getElementById('pin-mock-button');
     const label = document.getElementById('confirm-pin-modal-label');
     label.textContent = pinned ? 'Unpin this mock?' : 'Pin this mock?';
     btn.textContent = pinned ? 'Unpin' : 'Pin';
@@ -73,7 +73,7 @@ const setReplyMockModal = (node, id) => {
 
     document.getElementById('reply-mock-textarea').value = '';
 
-    const btn = document.getElementById('submit-reply-mock-btn');
+    const btn = document.getElementById('submit-reply-mock-button');
     btn.setAttribute('data-id', id.toString());
     btn.disabled = true;
 };
@@ -159,7 +159,7 @@ const createMockHtml = async (mockData, outstanding = false) => {
     btn1.innerHTML = '<i class="fas fa-comment"></i>';
     btn1.setAttribute('data-bs-toggle', 'modal');
     btn1.setAttribute('data-bs-target', '#reply-mock-modal');
-    btn1c.classList.add('mock-btn-container');
+    btn1c.classList.add('mock-button-container');
     btn1c.appendChild(btn1);
 
     const btn2 = document.createElement('button');
@@ -168,12 +168,12 @@ const createMockHtml = async (mockData, outstanding = false) => {
         <i class="fas fa-retweet"></i>
         <span>${data.remockUsers.length || ''}</span>
     `;
-    btn2.classList.add('remock-btn');
+    btn2.classList.add('remock-button');
     if (user && data.remockUsers.includes(user._id)) {
         btn2.classList.add('active');
     }
     btn2.onclick = async () => { await handleRemocks(btn2, data); };
-    btn2c.classList.add('mock-btn-container', 'green');
+    btn2c.classList.add('mock-button-container', 'green');
     btn2c.appendChild(btn2);
 
     const btn3 = document.createElement('button');
@@ -182,12 +182,12 @@ const createMockHtml = async (mockData, outstanding = false) => {
         <i class="fas fa-heart"></i>
         <span>${data.likes.length || ''}</span>
     `;
-    btn3.classList.add('like-btn');
+    btn3.classList.add('like-button');
     if (user && data.likes.includes(user._id)) {
         btn3.classList.add('active');
     }
     btn3.onclick = async () => { await handleLikes(btn3, data); };
-    btn3c.classList.add('mock-btn-container', 'red');
+    btn3c.classList.add('mock-button-container', 'red');
     btn3c.appendChild(btn3);
 
     const footer = document.createElement('div');
@@ -376,7 +376,7 @@ const submitMock = async (textarea, submitBtn) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const submitMockBtn = document.getElementById('submit-mock-btn');
+    const submitMockBtn = document.getElementById('submit-mock-button');
     const mockTextarea = document.getElementById('mock-textarea');
 
     if (mockTextarea) {
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitMockBtn.onclick = async () => { await submitMock(mockTextarea, submitMockBtn); };
     }
 
-    const submitReplyBtn = document.getElementById('submit-reply-mock-btn');
+    const submitReplyBtn = document.getElementById('submit-reply-mock-button');
     const replyTextarea = document.getElementById('reply-mock-textarea');
 
     if (replyTextarea) {
@@ -398,12 +398,12 @@ document.addEventListener('DOMContentLoaded', () => {
         submitReplyBtn.onclick = async () => { await submitMock(replyTextarea, submitReplyBtn); };
     }
 
-    const pinMockBtn = document.getElementById('pin-mock-btn');
+    const pinMockBtn = document.getElementById('pin-mock-button');
     if (pinMockBtn) {
         pinMockBtn.onclick = async () => { await pinMock(pinMockBtn); };
     }
 
-    const deleteMockBtn = document.getElementById('delete-mock-btn');
+    const deleteMockBtn = document.getElementById('delete-mock-button');
     if (deleteMockBtn) {
         deleteMockBtn.onclick = async () => { await deleteMock(deleteMockBtn); };
     }

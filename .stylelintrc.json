@@ -1,6 +1,7 @@
 {
   "extends": "stylelint-config-standard",
   "rules": {
+    "color-function-notation": "legacy",
     "comment-empty-line-before": null,
     "no-descending-specificity": null
   }

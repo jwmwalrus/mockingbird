@@ -30,7 +30,7 @@ block content
 
             .profile-buttons-container
                 if profileUser._id != userLoggedIn._id
-                    a.profile-button(href=`/messages/${profileUser._id}`)
+                    a.profile-button(href=`/inbox/${profileUser._id}`)
                         i.fas.fa-envelope
 
                     - const profileUserId = profileUser._id.toString()

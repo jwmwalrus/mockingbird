@@ -61,9 +61,9 @@ input[type="password"] {
   border: 1px solid #8e8e8e;
   background-color: #090909;
   text-align: center;
-  box-shadow: 0 1px 4px rgba(127 127 127 30%);
-  /* -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.3); */
-  /* -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.3); */
+  box-shadow: 0 1px 4px rgba(127, 127, 127, 30%);
+  /* -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 30%); */
+  /* -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 30%); */
 }
 
 /* input[type="submit"] { */
