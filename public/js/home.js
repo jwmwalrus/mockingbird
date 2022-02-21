@@ -1,4 +1,4 @@
-import common from './common.js';
+import { outputMocks } from './common/mocks.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error(`${res.statusText} - ${msg}`);
         }
 
-        const mocks = await res.json();
-        common.outputMocks(mocks, '.mocks-container');
+        outputMocks(await res.json(), '.mocks-container');
     } catch (e) {
         console.error(e);
     }

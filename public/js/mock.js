@@ -1,4 +1,4 @@
-import common from './common.js';
+import { outputMockWithReplies } from './common/mocks.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const mockId = window.sessionStorage.getItem('mockId');
@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error(`${res.statusText} - ${msg}`);
         }
 
-        const results = await res.json();
-        common.outputMockWithReplies(results, '.mocks-container');
+        outputMockWithReplies(await res.json(), '.mocks-container');
     } catch (e) {
         console.error(e);
     }

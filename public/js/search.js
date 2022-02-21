@@ -1,6 +1,5 @@
-import common from './common.js';
-
-let timer = null;
+import { outputUsers } from './common/users.js';
+import { outputMocks } from './common/mocks.js';
 
 const doSearch = async (value, searchType) => {
     const endpoint = searchType === 'users' ? 'users' : 'mocks';
@@ -15,9 +14,9 @@ const doSearch = async (value, searchType) => {
 
         const results = await res.json();
         if (endpoint === 'users') {
-            common.outputUsers(results, '.results-container');
+            outputUsers(results, '.results-container');
         } else {
-            common.outputMocks(results, '.results-container');
+            outputMocks(results, '.results-container');
         }
     } catch (e) {
         console.error(e);
@@ -28,7 +27,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const searchBox = document.getElementById('search-box');
     const container = document.querySelector('.results-container');
     const searchType = searchBox.getAttribute('data-search');
-    searchBox.onkeyup = (evt) => {
+    let timer = null;
+    searchBox.onkeydown = (evt) => {
         clearTimeout(timer);
         timer = setTimeout(async () => {
             const value = evt.target.value.trim();

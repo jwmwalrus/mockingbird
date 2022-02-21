@@ -1,4 +1,4 @@
-import common from './common.js';
+import { outputUsers } from './common/users.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const profileUserId = window.sessionStorage.getItem('profileUserId');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const user = await res.json();
-        common.outputUsers(user[selectedTab], '.results-container');
+        outputUsers(user[selectedTab], '.results-container');
     } catch (e) {
         console.error(e);
     }

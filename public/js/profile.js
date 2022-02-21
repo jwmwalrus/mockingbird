@@ -1,4 +1,5 @@
-import common from './common.js';
+import './common/profile.js';
+import { createMockHtml, outputMocks } from './common/mocks.js';
 
 const outputPinnedMock = (mocks, selector) => {
     const parent = document.querySelector(selector);
@@ -9,7 +10,7 @@ const outputPinnedMock = (mocks, selector) => {
     }
 
     mocks.forEach(async (m) => {
-        const node = await common.createMockHtml(m);
+        const node = await createMockHtml(m);
         parent.append(node);
     });
 };
@@ -29,8 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error(`${res.statusText} - ${msg}`);
             }
 
-            const mocks = await res.json();
-            outputPinnedMock(mocks, '.pinned-mock-container');
+            outputPinnedMock(await res.json(), '.pinned-mock-container');
         } catch (e) {
             console.error(e);
         }
@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error(`${res.statusText} - ${msg}`);
         }
 
-        const mocks = await res.json();
-        common.outputMocks(mocks, '.mocks-container');
+        outputMocks(await res.json(), '.mocks-container');
     } catch (e) {
         console.error(e);
     }
