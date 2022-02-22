@@ -1,0 +1,13 @@
+extends layout/main-layout.pug
+
+block content
+  .results-container
+
+block headerButton
+  a(href="/inbox/new")
+    i.fas.fa-plus-square
+
+block scripts
+  script(defer="", src="/js/inbox.js", type="module")
+
+

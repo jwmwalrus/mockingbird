@@ -12,10 +12,12 @@ import logoutRoutes from './routes/logout.js';
 
 import mocksApiRoutes from './routes/api/mocks.js';
 import usersApiRoutes from './routes/api/users.js';
+import chatsApiRoutes from './routes/api/chats.js';
 
 import mockRoutes from './routes/mock.js';
 import profileRoutes from './routes/profile.js';
 import searchRoutes from './routes/search.js';
+import inboxRoutes from './routes/inbox.js';
 
 const app = express();
 const port = 3003;
@@ -52,10 +54,12 @@ app.use('/logout', logoutRoutes);
 
 app.use('/api/mocks', mocksApiRoutes);
 app.use('/api/users', usersApiRoutes);
+app.use('/api/chats', chatsApiRoutes);
 
 app.use('/mock', requireLogin, mockRoutes);
 app.use('/profile', requireLogin, profileRoutes);
 app.use('/search', requireLogin, searchRoutes);
+app.use('/inbox', requireLogin, inboxRoutes);
 
 app.get('/', requireLogin, (req, res) => {
     const payload = {

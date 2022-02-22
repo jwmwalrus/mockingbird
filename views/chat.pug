@@ -1,0 +1,28 @@
+extends layout/main-layout.pug
+
+block content
+  if errorMessage && errorMessage.length > 0
+    .alert.alert-danger.alert-dismissible.fade-in(role="alert")
+      p.error-message #{errorMessage}
+  else
+    script.
+      window.sessionStorage.setItem('chatId', '!{chat._id}')
+
+    .chat-page-container
+      .chat-titlebar-container
+        +createChatImage(chat, userLoggedIn)
+        span#chat-name(data-bs-toggle="modal" data-bs-target="#chat-name-modal") This is the chat name
+
+      .main-content-contsiner
+        .chat-container
+          .chat-messages
+          .footer
+            textarea(name="messageInput", placeholder="Type a message...")
+            button.sendMessageButton
+              i.fas.fa-paper-plane
+
+    +createChatNameModal(chat)
+
+
+block scripts
+  script(defer="", src="/js/chat.js", type="module")

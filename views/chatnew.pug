@@ -1,0 +1,14 @@
+extends layout/main-layout.pug
+
+block content
+  .chat-page-container
+    .chat-title-bar
+      label(for="user-search-textbox") To
+      #selected-users
+        input#user-search-textbox(type="text", placeholder="Type the name of the person")
+    .results-container
+    button#create-chat-button(disabled="") Create chat
+
+block scripts
+  script(defer="", src="/js/chatnew.js", type="module")
+
