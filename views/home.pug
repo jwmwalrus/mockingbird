@@ -1,12 +1,12 @@
 extends layout/main-layout.pug
 
 block content
-    +createMockForm(userLoggedIn)
+  +createMockForm(userLoggedIn)
 
-    .mocks-container
+  .mocks-container
 
-    +createMockModals(userLoggedIn)
+  +createMockModals(userLoggedIn)
 
 
 block scripts
-    script(defer="", src="/js/home.js", type="module")
+  script(defer="", src="/js/home.js", type="module")

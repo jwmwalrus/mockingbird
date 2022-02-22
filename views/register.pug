@@ -1,36 +1,36 @@
 extends layout/login-layout.pug
 
 block content
-    .login-container
-        h1 Register
+  .login-container
+    h1 Register
 
-        form(id="register-form", method="POST" onSubmit="validateForm(event);")
-            if errorMessage && errorMessage.length > 0
-                .alert.alert-danger.alert-dismissible.fade-in(role="alert")
-                    p.error-message #{errorMessage}
-            input.mb-3(type="text", name="firstName", placeholder="First name", value=firstNAme, required="")
-            input.mb-3(type="text", name="lastName", placeholder="Last name", value=lastNAme, required="")
-            input.mb-3(type="text", name="username", placeholder="Username", value=username, required="")
-            input.mb-3(type="email", name="email", placeholder="Email", value=email, required="")
-            input.mb-3(id="password", type="password", name="password", placeholder="Password", value=password, required="")
-            input.mb-3(id="password-conf", type="password", name="passwordConf", placeholder="Confirm password", value=passwordConf, required="")
-            input.btn.btn-primary.mb-3(type="submit", value="Register")
-            .alert.alert-danger.alert-dismissible.hidden.fade-in(id="pass-alert", role="alert", style="display:none;")
-                p Passwords do not match. Please try again
+    form(id="register-form", method="POST" onSubmit="validateForm(event);")
+      if errorMessage && errorMessage.length > 0
+        .alert.alert-danger.alert-dismissible.fade-in(role="alert")
+          p.error-message #{errorMessage}
+      input.mb-3(type="text", name="firstName", placeholder="First name", value=firstNAme, required="")
+      input.mb-3(type="text", name="lastName", placeholder="Last name", value=lastNAme, required="")
+      input.mb-3(type="text", name="username", placeholder="Username", value=username, required="")
+      input.mb-3(type="email", name="email", placeholder="Email", value=email, required="")
+      input.mb-3(id="password", type="password", name="password", placeholder="Password", value=password, required="")
+      input.mb-3(id="password-conf", type="password", name="passwordConf", placeholder="Confirm password", value=passwordConf, required="")
+      input.btn.btn-primary.mb-3(type="submit", value="Register")
+      .alert.alert-danger.alert-dismissible.hidden.fade-in(id="pass-alert", role="alert", style="display:none;")
+        p Passwords do not match. Please try again
 
-        a(href="/login") Already have an account? Login here.
+    a(href="/login") Already have an account? Login here.
 
-    script.
-        function validateForm(e) {
-            e.preventDefault();
+  script.
+    function validateForm(e) {
+      e.preventDefault();
 
-            const passwordField = document.getElementById("password").value;
-            const passwordConfirmField = document.getElementById("password-conf").value;
+      const passwordField = document.getElementById("password").value;
+      const passwordConfirmField = document.getElementById("password-conf").value;
 
-            if (passwordField !== passwordConfirmField) {
-                document.getElementById("pass-alert").style.display = 'block';
-                return;
-            }
+      if (passwordField !== passwordConfirmField) {
+        document.getElementById("pass-alert").style.display = 'block';
+        return;
+      }
 
-            document.getElementById("register-form").submit();
-        }
+      document.getElementById("register-form").submit();
+    }

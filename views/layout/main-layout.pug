@@ -2,51 +2,53 @@ include ../mixins/mixins
 
 doctype html
 html(lang="en")
-    head
-        meta(charset="UTF-8")
-        title #{pageTitle}
+  head
+    meta(charset="UTF-8")
+    title #{pageTitle}
 
-        link(href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic", rel="stylesheet", type="text/css")
+    link(href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic", rel="stylesheet", type="text/css")
 
-        link(href="/static/css/bootstrap.min.css?v=v0.1.0", rel="stylesheet")
-        link(href="/static/cropper.min.css?v=v0.1.0" rel="stylesheet")
-        link(href="/css/main.css?v=v0.1.0", rel="stylesheet", media="all")
+    link(href="/static/css/bootstrap.min.css?v=v0.1.0", rel="stylesheet")
+    link(href="/static/cropper.min.css?v=v0.1.0" rel="stylesheet")
+    link(href="/css/main.css?v=v0.1.0", rel="stylesheet", media="all")
 
-        script(defer="", src="/static/jquery.min.js?v=v0.1.0")
-        script(defer="", src="/static/js/bootstrap.bundle.min.js?v=v0.1.0")
-        // script(defer="", src="/static/js/brands.min.js?v=v0.1.0")
-        script(defer="", src="/static/js/solid.min.js?v=v0.1.0")
-        script(defer="", src="/static/js/fontawesome.min.js?v=v0.1.0")
+    script(defer="", src="/static/jquery.min.js?v=v0.1.0")
+    script(defer="", src="/static/js/bootstrap.bundle.min.js?v=v0.1.0")
+    // script(defer="", src="/static/js/brands.min.js?v=v0.1.0")
+    script(defer="", src="/static/js/solid.min.js?v=v0.1.0")
+    script(defer="", src="/static/js/fontawesome.min.js?v=v0.1.0")
 
-        block scripts
+    block scripts
 
-    body.dark-mode
-        script.
-            window.sessionStorage.setItem('userLoggedIn', '!{userLoggedInJs}')
+  body.dark-mode
+    script.
+      window.sessionStorage.setItem('userLoggedIn', '!{userLoggedInJs}')
 
-        .wrapper
-            .row
-                nav.navbar-dark.bg-dark.col-2
-                    a.blue(href="/")
-                        i.fas.fa-dove
-                    a(href="/")
-                        i.fas.fa-home
-                    a(href="/search")
-                        i.fas.fa-search
-                    a(href="/notifications")
-                        i.fas.fa-bell
-                    a(href="/messages")
-                        i.fas.fa-envelope
-                    a(href="/profile")
-                        i.fas.fa-user
-                    a(href="/logout")
-                        i.fas.fa-sign-out-alt
+    .wrapper
+      .row
+        nav.navbar-dark.bg-dark.col-2
+          a.blue(href="/")
+            i.fas.fa-dove
+          a(href="/")
+            i.fas.fa-home
+          a(href="/search")
+            i.fas.fa-search
+          a(href="/notifications")
+            i.fas.fa-bell
+          a(href="/inbox")
+            i.fas.fa-envelope
+          a(href="/profile")
+            i.fas.fa-user
+          a(href="/logout")
+            i.fas.fa-sign-out-alt
 
-                .main-section-container.col-10.col-md-8.col-lg-6
-                    .title-container
-                        h1 #{pageTitle}
-                    block content
+        .main-section-container.col-10.col-md-8.col-lg-6
+          .title-container
+            h1 #{pageTitle}
+            block headerButton
 
-                .d-none.d-md-block.col-md-2.col-lg-4
-                    span third column
+          block content
+
+        .d-none.d-md-block.col-md-2.col-lg-4
+          span third column
 

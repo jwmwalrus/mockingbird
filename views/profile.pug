@@ -1,68 +1,68 @@
 extends layout/main-layout.pug
 
 block content
-    if !profileUser
-        p User not found
-    else
-        script.
-            window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
-            window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
+  if !profileUser
+    p User not found
+  else
+    script.
+      window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
+      window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
 
-        - followersCount = profileUser.followers ? profileUser.followers.length : 0
-        - followingCount = profileUser.following ? profileUser.following.length : 0
+    - followersCount = profileUser.followers ? profileUser.followers.length : 0
+    - followingCount = profileUser.following ? profileUser.following.length : 0
 
-        .profile-header-container
-            .cover-photo-section
-                .cover-photo-container
-                    if profileUser.coverPhoto
-                        img(src=profileUser.coverPhoto, alt="User's cover photo")
+    .profile-header-container
+      .cover-photo-section
+        .cover-photo-container
+          if profileUser.coverPhoto
+            img(src=profileUser.coverPhoto, alt="User's cover photo")
 
-                    if profileUser._id == userLoggedIn._id
-                        button.cover-photo-button(data-bs-toggle="modal", data-bs-target="#cover-photo-upload-modal")
-                            i.fas.fa-camera
+          if profileUser._id == userLoggedIn._id
+            button.cover-photo-button(data-bs-toggle="modal", data-bs-target="#cover-photo-upload-modal")
+              i.fas.fa-camera
 
-                .user-image-container
-                    img(src=profileUser.profilePic, alt="User's profile image")
+        .user-image-container
+          img(src=profileUser.profilePic, alt="User's profile image")
 
-                    if profileUser._id == userLoggedIn._id
-                        button.profile-picture-button(data-bs-toggle="modal", data-bs-target="#image-upload-modal")
-                            i.fas.fa-camera
+          if profileUser._id == userLoggedIn._id
+            button.profile-picture-button(data-bs-toggle="modal", data-bs-target="#image-upload-modal")
+              i.fas.fa-camera
 
-            .profile-buttons-container
-                if profileUser._id != userLoggedIn._id
-                    a.profile-button(href=`/inbox/${profileUser._id}`)
-                        i.fas.fa-envelope
+      .profile-buttons-container
+        if profileUser._id != userLoggedIn._id
+          a.profile-button(href=`/inbox/${profileUser._id}`)
+            i.fas.fa-envelope
 
-                    - const profileUserId = profileUser._id.toString()
-                    - if (userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
-                        +createFollowButton(profileUser, true)
-                    - else
-                        +createFollowButton(profileUser, false)
-            .user-detail-container
-                span.display-name #{profileUser.firstName} #{profileUser.lastName}
-                span.username @#{profileUser.username}
-                span.description #{profileUser.description}
+          - const profileUserId = profileUser._id.toString()
+          - if (userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
+            +createFollowButton(profileUser, true)
+          - else
+            +createFollowButton(profileUser, false)
+      .user-detail-container
+        span.display-name #{profileUser.firstName} #{profileUser.lastName}
+        span.username @#{profileUser.username}
+        span.description #{profileUser.description}
 
-                .followers-container
-                    a(href=`/profile/${profileUser.username}/following`)
-                        span.value #{followingCount}
-                        span Following
-                    a(href=`/profile/${profileUser.username}/followers`)
-                        span#followers-value.value #{followersCount}
-                        span Followers
+        .followers-container
+          a(href=`/profile/${profileUser.username}/following`)
+            span.value #{followingCount}
+            span Following
+          a(href=`/profile/${profileUser.username}/followers`)
+            span#followers-value.value #{followersCount}
+            span Followers
 
-        .tabs-container
-            +createTab('Mocks', `/profile/${profileUser.username}`, selectedTab != 'replies')
-            +createTab('Replies', `/profile/${profileUser.username}/replies`, selectedTab == 'replies')
+    .tabs-container
+      +createTab('Mocks', `/profile/${profileUser.username}`, selectedTab != 'replies')
+      +createTab('Replies', `/profile/${profileUser.username}/replies`, selectedTab == 'replies')
 
-        .pinned-mock-container
+    .pinned-mock-container
 
-        .mocks-container
+    .mocks-container
 
-        +createMockModals(userLoggedIn)
-        +createImageUploadModal()
-        +createCoverPhotoUploadModal()
+    +createMockModals(userLoggedIn)
+    +createImageUploadModal()
+    +createCoverPhotoUploadModal()
 
 block scripts
-    script(defer="", src="/js/profile.js", type="module")
+  script(defer="", src="/js/profile.js", type="module")
 

@@ -1,13 +1,17 @@
 extends layout/main-layout.pug
 
-block content
+  block content
     script.
-        window.sessionStorage.setItem('mockId', '!{mockId}')
+      window.sessionStorage.setItem('mockId', '!{mockId}')
 
-    .mocks-container
+  .mocks-container
+
+
+
+
 
     +createMockModals(userLoggedIn)
 
-block scripts
-    script(defer="", src="/js/mock.js", type="module")
+      block scripts
+        script(defer="", src="/js/mock.js", type="module")
 

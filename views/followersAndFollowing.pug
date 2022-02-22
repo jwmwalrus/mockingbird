@@ -1,20 +1,20 @@
 extends layout/main-layout.pug
 
 block content
-    if !profileUser
-        p User not found
-    else
-        script.
-            window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
-            window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
+  if !profileUser
+    p User not found
+  else
+    script.
+      window.sessionStorage.setItem('profileUserId', '!{profileUser._id}')
+      window.sessionStorage.setItem('selectedTab', '!{selectedTab}')
 
-        .tabs-container
-            +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab != 'followers')
-            +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
+    .tabs-container
+      +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab != 'followers')
+      +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
 
-        .results-container
+    .results-container
 
 block scripts
-    script(defer="", src="/js/followersAndFollowing.js?v=v0.1.0", type="module")
+  script(defer="", src="/js/followersAndFollowing.js?v=v0.1.0", type="module")
 
 

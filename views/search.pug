@@ -1,19 +1,19 @@
 extends layout/main-layout.pug
 
 block content
-    .search-bar-container
-        i.fas.fa-search
-        input#search-box(type="text", name="searchBox", data-search=selectedTab, placeholder="Search for users or mocks")
+  .search-bar-container
+    i.fas.fa-search
+    input#search-box(type="text", name="searchBox", data-search=selectedTab, placeholder="Search for users or mocks")
 
-    .tabs-container
-        +createTab('Mocks', `/search/mocks`, selectedTab != 'users')
-        +createTab('Users', `/search/users`, selectedTab == 'users')
+  .tabs-container
+    +createTab('Mocks', `/search/mocks`, selectedTab != 'users')
+    +createTab('Users', `/search/users`, selectedTab == 'users')
 
-    .results-container
+  .results-container
 
-    +createMockModals(userLoggedIn)
+  +createMockModals(userLoggedIn)
 
 block scripts
-    script(defer="", src="/js/search.js", type="module")
+  script(defer="", src="/js/search.js", type="module")
 
 

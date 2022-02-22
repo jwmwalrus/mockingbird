@@ -49,7 +49,7 @@ indent_size = 2
 [*.{json,json5,webmanifest}]
 indent_size = 2
 
-[*.{htm,html,css,sass,scss,less,svg,vue}]
+[*.{htm,html,pug,css,sass,scss,less,svg,vue}]
 indent_size = 2
 
 [*.{js,jsm,ts,tsx}]

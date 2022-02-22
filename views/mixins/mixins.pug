@@ -1,102 +1,139 @@
 mixin createMockForm(userLoggedIn)
-    .mock-form-container
-        .user-image-container
-            img(src=userLoggedIn.profilePic, alt="User's profile picture")
-        .textarea-container
-            textarea#mock-textarea(placeholer="What's happening?")
-            .buttons-container
-                button#submit-mock-button(disabled="") Mock
+  .mock-form-container
+    .user-image-container
+      img(src=userLoggedIn.profilePic, alt="User's profile picture")
+    .textarea-container
+      textarea#mock-textarea(placeholer="What's happening?")
+      .buttons-container
+        button#submit-mock-button(disabled="") Mock
 
 mixin createReplyMockModal(userLoggedIn)
-    #reply-mock-modal.modal.fade(tabindex="-1" aria-labelledby="reply-mock-modal-label" aria-hidden="true")
-        .modal-dialog
-            .modal-content.bg-dark
-                .modal-header
-                    h5#reply-mock-modal-label.modal-title Reply
-                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
-                .modal-body
-                    #original-mock-container
-                    .mock-form-container
-                        .user-image-container
-                            img(src=userLoggedIn.profilePic, alt="User's profile picture")
-                        .textarea-container
-                            textarea#reply-mock-textarea(placeholer="What do you want to say?")
-                .modal-footer
-                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                    button#submit-reply-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply
+  #reply-mock-modal.modal.fade(tabindex="-1" aria-labelledby="reply-mock-modal-label" aria-hidden="true")
+    .modal-dialog
+      .modal-content.bg-dark
+        .modal-header
+          h5#reply-mock-modal-label.modal-title Reply
+          button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+        .modal-body
+          #original-mock-container
+          .mock-form-container
+            .user-image-container
+              img(src=userLoggedIn.profilePic, alt="User's profile picture")
+            .textarea-container
+              textarea#reply-mock-textarea(placeholer="What do you want to say?")
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
+          button#submit-reply-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal" disabled="") Reply
 
 mixin createDeleteMockModal()
-    #delete-mock-modal.modal.fade(tabindex="-1" aria-labelledby="delete-mock-modal-label" aria-hidden="true")
-        .modal-dialog
-            .modal-content.bg-dark
-                .modal-header
-                    h5#delete-mock-modal-label.modal-title Delete Mock
-                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
-                .modal-body
-                    p Are you sure you want to delete this?
-                .modal-footer
-                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                    button#delete-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Delete
+  #delete-mock-modal.modal.fade(tabindex="-1" aria-labelledby="delete-mock-modal-label" aria-hidden="true")
+    .modal-dialog
+      .modal-content.bg-dark
+        .modal-header
+          h5#delete-mock-modal-label.modal-title Delete Mock
+          button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+        .modal-body
+          p Are you sure you want to delete this?
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
+          button#delete-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Delete
 
 mixin createMockModals(userLoggedIn)
-    +createReplyMockModal(userLoggedIn)
-    +createDeleteMockModal()
-    +createPinMockUploadModal()
+  +createReplyMockModal(userLoggedIn)
+  +createDeleteMockModal()
+  +createPinMockUploadModal()
 
 mixin createFollowButton(user, isFollowing)
-    - text = isFollowing ? 'Following' : 'Follow'
-    - buttonClass = isFollowing ? 'follow-button following' : 'follow-button'
-    button(class=buttonClass data-user=user._id) #{text}
+  - text = isFollowing ? 'Following' : 'Follow'
+  - buttonClass = isFollowing ? 'follow-button following' : 'follow-button'
+  button(class=buttonClass data-user=user._id) #{text}
 
 mixin createTab(name, href, isSelected)
-    - className = isSelected ? 'tab active' : 'tab'
-    a(href=href class=className)
-        span #{name}
+  - className = isSelected ? 'tab active' : 'tab'
+  a(href=href class=className)
+    span #{name}
 
 mixin createImageUploadModal()
-    #image-upload-modal.modal.fade(tabindex="-1" aria-labelledby="image-upload-modal-label" aria-hidden="true")
-        .modal-dialog
-            .modal-content.bg-dark
-                .modal-header
-                    h5#image-upload-modal-label.modal-title Upload a new profile picture
-                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
-                .modal-body
-                    input#file-photo(type="file" name="filePhoto")
+  #image-upload-modal.modal.fade(tabindex="-1" aria-labelledby="image-upload-modal-label" aria-hidden="true")
+    .modal-dialog
+      .modal-content.bg-dark
+        .modal-header
+          h5#image-upload-modal-label.modal-title Upload a new profile picture
+          button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+        .modal-body
+          input#file-photo(type="file" name="filePhoto")
 
-                    .image-preview-container
-                        img#image-preview
+          .image-preview-container
+            img#image-preview
 
-                .modal-footer
-                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
-                    button#image-upload-button.btn.btn-primary(type="button") Save
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
+          button#image-upload-button.btn.btn-primary(type="button") Save
 
 mixin createCoverPhotoUploadModal()
-    #cover-photo-upload-modal.modal.fade(tabindex="-1" aria-labelledby="cover-photo-upload-modal-label" aria-hidden="true")
-        .modal-dialog
-            .modal-content.bg-dark
-                .modal-header
-                    h5#cover-photo-upload-modal-label.modal-title Upload a new cover photo
-                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
-                .modal-body
-                    input#cover-photo(type="file" name="filePhoto")
+  #cover-photo-upload-modal.modal.fade(tabindex="-1" aria-labelledby="cover-photo-upload-modal-label" aria-hidden="true")
+    .modal-dialog
+      .modal-content.bg-dark
+        .modal-header
+          h5#cover-photo-upload-modal-label.modal-title Upload a new cover photo
+          button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+        .modal-body
+          input#cover-photo(type="file" name="filePhoto")
 
-                    .cover-photo-preview-container
-                        img#cover-photo-preview
+          .cover-photo-preview-container
+            img#cover-photo-preview
 
-                .modal-footer
-                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
-                    button#cover-photo-upload-button.btn.btn-primary(type="button") Save
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
+          button#cover-photo-upload-button.btn.btn-primary(type="button") Save
 
 mixin createPinMockUploadModal()
-    #confirm-pin-modal.modal.fade(tabindex="-1" aria-labelledby="confirm-pin-modal-label" aria-hidden="true")
-        .modal-dialog
-            .modal-content.bg-dark
-                .modal-header
-                    h5#confirm-pin-modal-label.modal-title Pin this mock?
-                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
-                .modal-body
-                    p While pinned, the mock will appear at the top of your profile. You can only pin one mock.
+  #confirm-pin-modal.modal.fade(tabindex="-1" aria-labelledby="confirm-pin-modal-label" aria-hidden="true")
+    .modal-dialog
+      .modal-content.bg-dark
+        .modal-header
+          h5#confirm-pin-modal-label.modal-title Pin this mock?
+          button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+        .modal-body
+          p While pinned, the mock will appear at the top of your profile. You can only pin one mock.
 
-                .modal-footer
-                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
-                    button#pin-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Pin
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
+          button#pin-mock-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Pin
+
+mixin createChatImage(chatData, userLoggedIn)
+  if (!chatData)
+    return
+
+  - let i = 0
+  - const maxImagesToShow = 3
+  - let remainingUsers = chatData.users.length - maxImagesToShow
+  - remainingUsers--
+
+  .chat-image-container
+    if remainingUsers > 0
+      .user-count
+        span +#{remainingUsers}
+
+    each user in chatData.users
+      if chatData.users.length != 1 && user._id == userLoggedIn._id
+        - continue
+      else if i >= maxImagesToShow
+        - break
+
+      img(src=user.profilePic, alt="User's profile picture", title=user.firstName)
+      - i++
+
+mixin createChatNameModal(chat)
+  #chat-name-modal.modal.fade(tabindex="-1" aria-labelledby="chat-name-modal-label" aria-hidden="true")
+    .modal-dialog
+      .modal-content.bg-dark
+        .modal-header
+          h5#chat-name-modal-label.modal-title Change the chat name
+          button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close") &times;
+        .modal-body
+          input#chat-name-textbox(type="text", placeholder="Enter a name for this chat", value=chat.chatName)
+
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancel
+          button#chat-name-button.btn.btn-primary(type="button" data-bs-dismiss="modal") Save
