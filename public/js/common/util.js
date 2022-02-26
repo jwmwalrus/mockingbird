@@ -4,6 +4,28 @@ const getUserLoggedIn = () => {
     return JSON.parse(item);
 };
 
+const scrollIntoView = (selector) => {
+    const fn = (s) => {
+        const e = s instanceof Element || s instanceof HTMLElement
+            ? s
+            : document.querySelector(s);
+
+        if (!e) {
+            console.error('element not found:', s);
+            return;
+        }
+
+        e.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'end' });
+    };
+
+    if (Array.isArray(selector)) {
+        selector.forEach(fn);
+        return;
+    }
+
+    fn(selector);
+};
+
 const timeElapsed = (current, previous) => {
     const msPerMinute = 60 * 1000;
     const msPerHour = msPerMinute * 60;
@@ -40,5 +62,6 @@ const timeElapsed = (current, previous) => {
 
 export {
     getUserLoggedIn,
+    scrollIntoView,
     timeElapsed,
 };

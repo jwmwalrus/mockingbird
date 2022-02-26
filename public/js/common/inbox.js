@@ -35,6 +35,11 @@ const getChatImageHtml = (users) => {
     return container;
 };
 
+const formatLatestMessage = (msg) => {
+    const { sender } = msg;
+    return `${sender.firstName} ${sender.lastName}: ${msg.content}`;
+};
+
 const createChatHtml = (chatData) => {
     const heading = document.createElement('span');
     heading.classList.add('heading', 'ellipsis');
@@ -45,7 +50,9 @@ const createChatHtml = (chatData) => {
 
     const subtext = document.createElement('span');
     subtext.classList.add('subtext', 'ellipsis');
-    subtext.textContent = chatData.latestMessage ?? 'This is the latest message'; // TODO: implement
+    subtext.textContent = chatData.latestMessage
+        ? chatData.latestMessage ? formatLatestMessage(chatData.latestMessage) : '--'
+        : '--';
 
     const details = document.createElement('div');
     details.classList.add('results-details-container', 'ellipsis');

@@ -1,25 +1,9 @@
+import { scrollIntoView } from './common/util.js';
+import { addChatMessage, submitMessage } from './common/chats.js';
 import { getOtherChatUsers } from './common/inbox.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const chatId = window.sessionStorage.getItem('chatId');
-
-    try {
-        const res = await fetch(`/api/chats/${chatId}`);
-        if (!res.ok) {
-            const msg = await res.text();
-            throw new Error(`${res.statusText} - ${msg}`);
-        }
-
-        const chatData = await res.json();
-
-        const chatName = document.getElementById('chat-name');
-        chatName.textContent = chatData.chatName
-        ?? getOtherChatUsers(chatData.users)
-            .map((u) => `${u.firstName} ${u.lastName}`)
-            .join();
-    } catch (e) {
-        console.error(e);
-    }
 
     const chatNameBtn = document.getElementById('chat-name-button');
     chatNameBtn.onclick = async () => {
@@ -44,4 +28,62 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error(e);
         }
     };
+
+    const textbox = document.querySelector('.input-textbox');
+    textbox.onkeydown = async (evt) => {
+        if (evt.shiftKey) {
+            return;
+        }
+        if (evt.code !== 'Enter' || evt.keyCode !== 13) {
+            return;
+        }
+
+        evt.preventDefault();
+
+        submitMessage(chatId);
+    };
+
+    const sendMsgBtn = document.querySelector('.send-message-button');
+    sendMsgBtn.onclick = async () => submitMessage(chatId);
+
+    try {
+        const res = await fetch(`/api/chats/${chatId}`);
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+
+        const chatData = await res.json();
+
+        const chatName = document.getElementById('chat-name');
+        chatName.textContent = chatData.chatName
+        ?? getOtherChatUsers(chatData.users)
+            .map((u) => `${u.firstName} ${u.lastName}`)
+            .join();
+    } catch (e) {
+        console.error(e);
+    }
+
+    try {
+        const res = await fetch(`/api/chats/${chatId}/messages`);
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+
+        const messages = await res.json();
+        let lastSenderId = '';
+        messages.forEach((m, idx) => {
+            const nextMsg = idx < messages.length ? messages[idx + 1] : null;
+            addChatMessage(m, '.chat-messages', nextMsg, lastSenderId);
+            lastSenderId = m.sender._id;
+        });
+
+        document.querySelector('.loading-spinner-container').remove();
+        document.querySelector('.chat-container').style.visibility = 'visible';
+        // scrollIntoView(['.message:last-child', '.input-textbox']);
+        scrollIntoView('.message:last-child');
+    } catch (e) {
+        console.error(e);
+    }
 });

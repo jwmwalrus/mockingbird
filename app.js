@@ -13,6 +13,7 @@ import logoutRoutes from './routes/logout.js';
 import mocksApiRoutes from './routes/api/mocks.js';
 import usersApiRoutes from './routes/api/users.js';
 import chatsApiRoutes from './routes/api/chats.js';
+import messagesApiRoutes from './routes/api/messages.js';
 
 import mockRoutes from './routes/mock.js';
 import profileRoutes from './routes/profile.js';
@@ -55,6 +56,7 @@ app.use('/logout', logoutRoutes);
 app.use('/api/mocks', mocksApiRoutes);
 app.use('/api/users', usersApiRoutes);
 app.use('/api/chats', chatsApiRoutes);
+app.use('/api/messages', messagesApiRoutes);
 
 app.use('/mock', requireLogin, mockRoutes);
 app.use('/profile', requireLogin, profileRoutes);

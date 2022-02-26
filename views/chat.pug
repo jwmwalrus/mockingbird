@@ -14,11 +14,13 @@ block content
         span#chat-name(data-bs-toggle="modal" data-bs-target="#chat-name-modal") This is the chat name
 
       .main-content-contsiner
-        .chat-container
-          .chat-messages
+        .loading-spinner-container
+          img(src="/images/loadingSpinner.gif", alt="Loading...")
+        .chat-container(style="visibility:hidden;")
+          ul.chat-messages
           .footer
-            textarea(name="messageInput", placeholder="Type a message...")
-            button.sendMessageButton
+            textarea.input-textbox(name="messageInput", placeholder="Type a message...")
+            button.send-message-button
               i.fas.fa-paper-plane
 
     +createChatNameModal(chat)

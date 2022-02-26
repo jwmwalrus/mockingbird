@@ -3,18 +3,22 @@ import mongoose from 'mongoose';
 
 import Chat from '../../schemas/Chat.js';
 import User from '../../schemas/User.js';
+import Message from '../../schemas/Message.js';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const results = await Chat.find({
+        let results = await Chat.find({
             users: {
                 $elemMatch: { $eq: req.session.user._id },
             },
         })
             .populate('users')
+            .populate('latestMessage')
             .sort({ updatedAt: -1 });
+
+        results = await User.populate(results, { path: 'latestMessage.sender' });
 
         res.status(200).send(results);
     } catch (e) {
@@ -38,6 +42,22 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/:id/messages', async (req, res) => {
+    try {
+        const results = await Message.find({
+            chat: req.params.id,
+            // users: { $elemMatch: { $eq: req.session.user._id } },
+        })
+            .populate('sender')
+            .populate('readBy');
+
+        res.status(200).send(results);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
 router.post('/', async (req, res) => {
     if (!req.body.users || req.body.users.length === 0) {
         res.status(400).send('Missing users');
@@ -47,12 +67,12 @@ router.post('/', async (req, res) => {
     const ids = [...req.body.users];
     ids.push(req.session.user._id);
 
-    try {
-        const chatData = {
-            users: ids.map((x) => mongoose.Types.ObjectId(x)),
-            isGroupChat: true,
-        };
+    const chatData = {
+        users: ids.map((x) => mongoose.Types.ObjectId(x)),
+        isGroupChat: true,
+    };
 
+    try {
         let result = await Chat.create(chatData);
         result = await User.populate(result, { path: 'users' });
         res.status(201).send(result);
