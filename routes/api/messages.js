@@ -23,8 +23,8 @@ router.post('/', async (req, res) => {
         result = await User.populate(result, { path: 'sender' });
         result = await User.populate(result, { path: 'readBy' });
         result = await Chat.populate(result, { path: 'chat' });
-        const tmp = await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: result }, { new: true });
-        console.log(tmp);
+        result = await User.populate(result, { path: 'chat.users' });
+        await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: result });
         res.status(201).send(result);
     } catch (e) {
         console.error(e);

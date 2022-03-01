@@ -1,4 +1,9 @@
 import { getUserLoggedIn, scrollIntoView } from './util.js';
+import socket from './socket.js';
+
+let typing = false;
+let lastTypingTime = null;
+const timerLength = 3000;
 
 const createMessageHtml = (msgData, nextMsg, lastSenderId) => {
     const { sender } = msgData;
@@ -72,6 +77,9 @@ const submitMessage = async (chatId) => {
         return;
     }
 
+    typing = false;
+    socket.emit('stop-typing', chatId);
+
     textbox.value = '';
 
     const data = { chatId, content };
@@ -86,7 +94,12 @@ const submitMessage = async (chatId) => {
             const msg = await res.text();
             throw new Error(`${res.statusText} - ${msg}`);
         }
-        addChatMessage(await res.json(), '.chat-messages');
+        const newMsg = await res.json();
+        addChatMessage(newMsg, '.chat-messages');
+
+        if (socket.isConnected()) {
+            socket.emit('new-message', newMsg);
+        }
 
         scrollIntoView(['.message:last-child', '.input-textbox']);
     } catch (e) {
@@ -95,7 +108,32 @@ const submitMessage = async (chatId) => {
     }
 };
 
+const updateTyping = (chatId) => {
+    if (!socket.isConnected) {
+        return;
+    }
+
+    if (!typing) {
+        typing = true;
+        socket.emit('typing', chatId);
+    }
+
+    lastTypingTime = new Date().getTime();
+    setTimeout(() => {
+        const timeNow = new Date().getTime();
+        if (typing && timeNow - lastTypingTime > timerLength) {
+            typing = false;
+            socket.emit('stop-typing', chatId);
+        }
+    }, timerLength);
+};
+
+socket.on('chat-message-received', (msg) => {
+    addChatMessage(msg, '.chat-messages');
+});
+
 export {
     addChatMessage,
     submitMessage,
+    updateTyping,
 };

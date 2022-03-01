@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import { Server as IOServer } from 'socket.io';
 
 import './database.js';
 import { requireLogin, postTrimmer } from './middleware.js';
@@ -23,7 +24,8 @@ import inboxRoutes from './routes/inbox.js';
 const app = express();
 const port = 3003;
 
-app.listen(port, () => console.info(`Server listening on port ${port}`));
+const server = app.listen(port, () => console.info(`Server listening on port ${port}`));
+const io = new IOServer(server, { pingTimeout: 60000 });
 
 app.set('view engine', 'pug');
 app.set('views', 'views');
@@ -38,6 +40,7 @@ app.use(
     express.static(path.resolve('node_modules/jquery/dist')),
     express.static(path.resolve('node_modules/@fortawesome/fontawesome-free')),
     express.static(path.resolve('node_modules/cropperjs/dist')),
+    express.static(path.resolve('node_modules/socket.io/client-dist')),
 );
 app.use(
     '/uploads',
@@ -70,4 +73,32 @@ app.get('/', requireLogin, (req, res) => {
         userLoggedInJs: JSON.stringify(req.session.user),
     };
     res.status(200).render('home', payload);
+});
+
+io.on('connection', (socket) => {
+    socket.on('setup', (userData) => {
+        socket.join(userData._id);
+        socket.emit('connected');
+    });
+
+    socket.on('join room', (room) => socket.join(room));
+    socket.on('typing', (room) => socket.in(room).emit('typing'));
+    socket.on('stop-typing', (room) => socket.in(room).emit('stop-typing'));
+
+    socket.on('new-message', (msg) => {
+        const { chat } = msg;
+        if (!chat.users) {
+            console.error('Chat users not defned');
+            return;
+        }
+
+        chat.users.forEach((u) => {
+            if (u._id === msg.sender._id) {
+                return;
+            }
+
+            socket.in(u._id).emit('message-received', msg);
+            socket.in(u._id).emit('chat-message-received', msg);
+        });
+    });
 });

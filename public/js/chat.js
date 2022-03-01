@@ -1,9 +1,18 @@
 import { scrollIntoView } from './common/util.js';
-import { addChatMessage, submitMessage } from './common/chats.js';
+import { addChatMessage, submitMessage, updateTyping } from './common/chats.js';
 import { getOtherChatUsers } from './common/inbox.js';
+import socket from './common/socket.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const chatId = window.sessionStorage.getItem('chatId');
+
+    socket.emit('join-room', chatId);
+    socket.on('typing', () => {
+        document.querySelector('.typing-dots').style.display = 'block';
+    });
+    socket.on('stop-typing', () => {
+        document.querySelector('.typing-dots').style.display = 'none';
+    });
 
     const chatNameBtn = document.getElementById('chat-name-button');
     chatNameBtn.onclick = async () => {
@@ -31,6 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const textbox = document.querySelector('.input-textbox');
     textbox.onkeydown = async (evt) => {
+        updateTyping(chatId);
+
         if (evt.shiftKey) {
             return;
         }

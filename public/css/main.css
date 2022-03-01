@@ -47,6 +47,10 @@ textarea {
   color: white !important;
 }
 
+* {
+  outline: none;
+}
+
 a {
   color: inherit;
 }
@@ -93,6 +97,10 @@ button {
   background-color: transparent;
   border: none;
   color: var(--grey-buttton-text);
+}
+
+ul {
+  margin: 0;
 }
 
 /*
@@ -624,6 +632,17 @@ button {
   padding: 6px 12px;
   border-radius: 18px;
   font-size: 14px;
+}
+
+.typing-dots {
+  padding: 0;
+  display: none;
+}
+
+.typing-dots img {
+  height: 35px;
+  background-color: transparent;
+  border-radius: 18px;
 }
 
 .chat-messages .message.mine {
