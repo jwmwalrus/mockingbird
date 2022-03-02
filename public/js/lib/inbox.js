@@ -51,7 +51,7 @@ const createChatHtml = (chatData) => {
     const subtext = document.createElement('span');
     subtext.classList.add('subtext', 'ellipsis');
     subtext.textContent = chatData.latestMessage
-        ? chatData.latestMessage ? formatLatestMessage(chatData.latestMessage) : '--'
+        ? formatLatestMessage(chatData.latestMessage)
         : '--';
 
     const details = document.createElement('div');

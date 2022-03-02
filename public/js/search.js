@@ -1,5 +1,5 @@
-import { outputUsers } from './common/users.js';
-import { outputMocks } from './common/mocks.js';
+import { outputUsers } from './lib/users.js';
+import { outputMocks } from './lib/mocks.js';
 
 const doSearch = async (value, searchType) => {
     const endpoint = searchType === 'users' ? 'users' : 'mocks';
@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const searchBox = document.getElementById('search-box');
     const container = document.querySelector('.results-container');
     const searchType = searchBox.getAttribute('data-search');
+
     let timer = null;
     searchBox.onkeydown = (evt) => {
         clearTimeout(timer);
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 container.innerHTML = '';
                 return;
             }
+
             await doSearch(value, searchType);
         }, 1000);
     };

@@ -1,7 +1,7 @@
-import { scrollIntoView } from './common/util.js';
-import { addChatMessage, submitMessage, updateTyping } from './common/chats.js';
-import { getOtherChatUsers } from './common/inbox.js';
-import socket from './common/socket.js';
+import { scrollIntoView } from './lib/util.js';
+import { addChatMessage, submitMessage, updateTyping } from './lib/chats.js';
+import { getOtherChatUsers } from './lib/inbox.js';
+import socket from './lib/socket.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const chatId = window.sessionStorage.getItem('chatId');

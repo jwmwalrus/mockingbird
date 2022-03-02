@@ -1,5 +1,5 @@
-import './common/profile.js';
-import { createMockHtml, outputMocks } from './common/mocks.js';
+import './lib/profile.js';
+import { createMockHtml, outputMocks } from './lib/mocks.js';
 
 const outputPinnedMock = (mocks, selector) => {
     const parent = document.querySelector(selector);

@@ -1,4 +1,4 @@
-import { outputMocks } from './common/mocks.js';
+import { outputMocks } from './lib/mocks.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {

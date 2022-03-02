@@ -1,4 +1,4 @@
-import { outputChatList } from './common/inbox.js';
+import { outputChatList } from './lib/inbox.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {

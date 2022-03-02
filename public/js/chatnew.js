@@ -1,5 +1,5 @@
-import { getUserLoggedIn } from './common/util.js';
-import { createUserHtml } from './common/users.js';
+import { getUserLoggedIn } from './lib/util.js';
+import { createUserHtml } from './lib/users.js';
 
 const selectedUsers = new Map();
 

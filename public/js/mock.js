@@ -1,4 +1,4 @@
-import { outputMockWithReplies } from './common/mocks.js';
+import { outputMockWithReplies } from './lib/mocks.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const mockId = window.sessionStorage.getItem('mockId');

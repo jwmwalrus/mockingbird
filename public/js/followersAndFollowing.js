@@ -1,4 +1,4 @@
-import { outputUsers } from './common/users.js';
+import { outputUsers } from './lib/users.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const profileUserId = window.sessionStorage.getItem('profileUserId');

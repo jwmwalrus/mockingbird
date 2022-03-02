@@ -1,4 +1,4 @@
-import { markNotificationAsRead, outputNotificstionList } from './common/notifications.js';
+import { markNotificationAsRead, outputNotificstionList } from './lib/lib.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {

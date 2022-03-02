@@ -19,7 +19,7 @@ class Socket {
             }
 
             // TODO: pop-up
-            console.log('Must popup message');
+            console.log(`Must popup message: ${msg}`);
         });
     }
 
