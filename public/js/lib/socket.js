@@ -11,16 +11,6 @@ class Socket {
         this.socket.on('connected', () => {
             console.info('Socket is connected');
         });
-
-        this.socket.on('message-received', (msg) => {
-            const elems = document.querySelectorAll('.chat-container');
-            if (elems.length > 0) {
-                return;
-            }
-
-            // TODO: pop-up
-            console.log(`Must popup message: ${msg}`);
-        });
     }
 
     emit(evt, payload = null) {

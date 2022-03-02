@@ -128,10 +128,6 @@ const updateTyping = (chatId) => {
     }, timerLength);
 };
 
-socket.on('chat-message-received', (msg) => {
-    addChatMessage(msg, '.chat-messages');
-});
-
 export {
     addChatMessage,
     submitMessage,

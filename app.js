@@ -102,7 +102,6 @@ io.on('connection', (socket) => {
             }
 
             socket.in(u._id).emit('message-received', msg);
-            socket.in(u._id).emit('chat-message-received', msg);
         });
     });
 });
