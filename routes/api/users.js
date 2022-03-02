@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import multer from 'multer';
 
 import User from '../../schemas/User.js';
+import Notification from '../../schemas/Notification.js';
 
 const router = express.Router();
 
@@ -132,6 +133,15 @@ router.put('/:id/follow', async (req, res) => {
             userId,
             { [option]: { followers: req.session.user._id } },
         );
+
+        if (!isFollowing) {
+            await Notification.insertNotification(
+                userId,
+                req.session.user._id,
+                'follow',
+                req.session.user._id,
+            );
+        }
         res.status(200).send(req.session.user);
     } catch (e) {
         console.error(e);

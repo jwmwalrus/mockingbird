@@ -2,6 +2,7 @@ import express from 'express';
 
 import Mock from '../../schemas/Mock.js';
 import User from '../../schemas/User.js';
+import Notification from '../../schemas/Notification.js';
 
 const router = express.Router();
 
@@ -92,6 +93,17 @@ router.post('/', async (req, res) => {
     try {
         let newMock = await Mock.create(mockData);
         newMock = await User.populate(newMock, { path: 'mockedBy' });
+        newMock = await Mock.populate(newMock, { path: 'replyTo' });
+
+        if (req.body.replyTo) {
+            await Notification.insertNotification(
+                newMock.replyTo.mockedBy,
+                req.session.user._id,
+                'reply',
+                newMock._id,
+            );
+        }
+
         res.status(201).send(newMock);
     } catch (e) {
         console.error(e);
@@ -123,6 +135,16 @@ router.post('/:id/remock', async (req, res) => {
             { [option]: { remockUsers: userId } },
             { new: true },
         );
+
+        if (!deletedMock) {
+            await Notification.insertNotification(
+                mock.mockedBy,
+                userId,
+                'remock',
+                mockId,
+            );
+        }
+
         res.status(200).send(mock);
     } catch (e) {
         console.error(e);
@@ -149,6 +171,16 @@ router.put('/:id/like', async (req, res) => {
             { [option]: { likes: userId } },
             { new: true },
         );
+
+        if (!isLiked) {
+            await Notification.insertNotification(
+                mock.mockedBy,
+                userId,
+                'mock-like',
+                mockId,
+            );
+        }
+
         res.status(200).send(mock);
     } catch (e) {
         console.error(e);

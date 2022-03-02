@@ -3,8 +3,25 @@ import express from 'express';
 import Chat from '../../schemas/Chat.js';
 import User from '../../schemas/User.js';
 import Message from '../../schemas/Message.js';
+import Notification from '../../schemas/Notification.js';
 
 const router = express.Router();
+
+const insertNotifications = async (chat, msg) => {
+    if (!chat.users || chat.users.length === 0) {
+        return;
+    }
+
+    const senderId = msg.sender._id.toString();
+    for await (const uid of chat.users.filter((x) => x !== senderId)) {
+        Notification.insertNotification(
+            uid,
+            msg.sender._id,
+            'new-message',
+            chat._id,
+        );
+    }
+};
 
 router.post('/', async (req, res) => {
     if (!req.body.content || !req.body.chatId) {
@@ -24,7 +41,13 @@ router.post('/', async (req, res) => {
         result = await User.populate(result, { path: 'readBy' });
         result = await Chat.populate(result, { path: 'chat' });
         result = await User.populate(result, { path: 'chat.users' });
-        await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: result });
+        const chat = await Chat.findByIdAndUpdate(
+            req.body.chatId,
+            { latestMessage: result },
+            { new: true },
+        );
+
+        await insertNotifications(chat, result);
         res.status(201).send(result);
     } catch (e) {
         console.error(e);

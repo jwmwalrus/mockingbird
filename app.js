@@ -15,11 +15,13 @@ import mocksApiRoutes from './routes/api/mocks.js';
 import usersApiRoutes from './routes/api/users.js';
 import chatsApiRoutes from './routes/api/chats.js';
 import messagesApiRoutes from './routes/api/messages.js';
+import notificationsApiRoutes from './routes/api/notifications.js';
 
 import mockRoutes from './routes/mock.js';
 import profileRoutes from './routes/profile.js';
 import searchRoutes from './routes/search.js';
 import inboxRoutes from './routes/inbox.js';
+import notificationsRoutes from './routes/notifications.js';
 
 const app = express();
 const port = 3003;
@@ -60,11 +62,13 @@ app.use('/api/mocks', mocksApiRoutes);
 app.use('/api/users', usersApiRoutes);
 app.use('/api/chats', chatsApiRoutes);
 app.use('/api/messages', messagesApiRoutes);
+app.use('/api/notifications', notificationsApiRoutes);
 
 app.use('/mock', requireLogin, mockRoutes);
 app.use('/profile', requireLogin, profileRoutes);
 app.use('/search', requireLogin, searchRoutes);
 app.use('/inbox', requireLogin, inboxRoutes);
+app.use('/notifications', requireLogin, notificationsRoutes);
 
 app.get('/', requireLogin, (req, res) => {
     const payload = {

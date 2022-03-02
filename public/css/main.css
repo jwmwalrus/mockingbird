@@ -6,12 +6,12 @@
   --blue: #1fa2f1;
   --blue-light: #9bd1f9;
   --blue-background: rgba(31, 162, 241, 40%);
-  --button-hover-bg: #d4edff;
-  --light-grey: #e6ecf0;
-  --dark-grey: #4c4d50;
+  --grey-light: #e6ecf0;
+  --grey-dark: #4c4d50;
   --grey-border: #4c4d50;
   --grey-text: #8d9fae;
   --grey-button-text: rgba(255, 255, 255, 66%);
+  --button-hover-bg: #d4edff;
   --spacing: 15px;
   --font-wt-light: 200;
   --font-wt-regular: 300;
@@ -397,7 +397,7 @@ ul {
   width: 100%;
   padding: 5px 15px 5px 40px;
   border-radius: 50px;
-  background-color: var(--light-grey);
+  background-color: var(--grey-light);
   border: none;
   color: var(--grey-text);
 }
@@ -443,7 +443,7 @@ ul {
 }
 
 #create-chat-button:disabled {
-  background-color: var(--light-grey);
+  background-color: var(--grey-light);
   color: var(--grey-text);
 }
 
@@ -720,6 +720,14 @@ ul {
 .loading-spinner-container img {
   width: 50%;
   max-width: 75px;
+}
+
+/*
+ * notifications
+ */
+
+.results-list-item.active {
+  background-color: var(--blue-background);
 }
 
 /*
