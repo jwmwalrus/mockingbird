@@ -5,11 +5,31 @@ import Notification from '../../schemas/Notification.js';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+    const filter = {
+        userTo: req.session.user._id,
+        notificationType: { $ne: 'new-message' },
+    };
+
+    if (req.query.unreadOnly && req.query.unreadOnly === 'true') {
+        filter.opened = false;
+    }
+
     try {
-        const results = await Notification.find({
-            userTo: req.session.user._id,
-            notificationType: { $ne: 'new-message' },
-        })
+        const results = await Notification.find(filter)
+            .populate('userFrom')
+            .populate('userTo')
+            .sort({ createdAt: -1 });
+
+        res.status(200).send(results);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
+router.get('/latest', async (req, res) => {
+    try {
+        const results = await Notification.findOne({ userTo: req.session.user._id })
             .populate('userFrom')
             .populate('userTo')
             .sort({ createdAt: -1 });

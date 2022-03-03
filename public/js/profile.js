@@ -51,4 +51,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (e) {
         console.error(e);
     }
+
+    const followBtns = document.querySelectorAll('button.follow-button');
+    followBtns.forEach((btn) => {
+        btn.onclick = async () => handleFollows(btn);
+    });
 });

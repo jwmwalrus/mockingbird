@@ -1,4 +1,5 @@
 import { getUserLoggedIn } from './util.js';
+import socket from './socket.js';
 
 const handleFollows = async (btn) => {
     const userId = btn.getAttribute('data-user');
@@ -14,6 +15,7 @@ const handleFollows = async (btn) => {
         if (data.following.includes(userId)) {
             btn.classList.add('following');
             btn.innerText = 'Following';
+            socket.emit('new-notification', userId);
         } else {
             btn.classList.remove('following');
             btn.innerText = 'Follow';
@@ -102,14 +104,8 @@ const outputUsers = (users, selector) => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const followBtns = document.querySelectorAll('button.followButton');
-    followBtns.forEach((btn) => {
-        btn.onclick = async () => handleFollows(btn);
-    });
-});
-
 export {
     createUserHtml,
+    handleFollows,
     outputUsers,
 };

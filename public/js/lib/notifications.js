@@ -110,8 +110,43 @@ const outputNotificstionList = async (notifications, selector) => {
     });
 };
 
+const refreshBadge = async (type) => {
+    let badgeId;
+    switch (type) {
+        case 'chats':
+            badgeId = 'messages-badge';
+            break;
+        case 'notifications':
+            badgeId = 'notifications-badge';
+            break;
+        default:
+            return;
+    }
+    try {
+        const query = new URLSearchParams();
+        query.append('unreadOnly', true);
+
+        const res = await fetch(`/api/${type}/?${query.toString()}`);
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(`${res.statusText} - ${msg}`);
+        }
+        const data = await res.json();
+        const badge = document.getElementById(badgeId);
+        badge.innerText = data.length.toString();
+        if (data.length > 0) {
+            badge.classList.add('active');
+        } else {
+            badge.classList.remove('active');
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 export {
     createNotificationHtml,
     markNotificationAsRead,
     outputNotificstionList,
+    refreshBadge,
 };

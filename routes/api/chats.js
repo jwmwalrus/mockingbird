@@ -20,6 +20,14 @@ router.get('/', async (req, res) => {
 
         results = await User.populate(results, { path: 'latestMessage.sender' });
 
+        if (req.query.unreadOnly && req.query.unreadOnly === 'true') {
+            results = results.filter(
+                (r) => r.latestMessage
+                && (!r.latestMessage.readBy
+                    || !r.latestMessage.readBy.includes(req.session.user._id)),
+            );
+        }
+
         res.status(200).send(results);
     } catch (e) {
         console.error(e);
@@ -29,11 +37,14 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const result = await Chat.findOne({
+        let result = await Chat.findOne({
             _id: req.params.id,
             users: { $elemMatch: { $eq: req.session.user._id } },
         })
-            .populate('users');
+            .populate('users')
+            .populate('latestMessage');
+
+        result = await User.populate(result, { path: 'latestMessage.sender' });
 
         res.status(200).send(result);
     } catch (e) {
@@ -44,10 +55,7 @@ router.get('/:id', async (req, res) => {
 
 router.get('/:id/messages', async (req, res) => {
     try {
-        const results = await Message.find({
-            chat: req.params.id,
-            // users: { $elemMatch: { $eq: req.session.user._id } },
-        })
+        const results = await Message.find({ chat: req.params.id })
             .populate('sender')
             .populate('readBy');
 
@@ -94,6 +102,19 @@ router.put('/:id', async (req, res) => {
         if (!chat) {
             throw new Error('Chat does not exist or cannot be updated');
         }
+        res.sendStatus(204);
+    } catch (e) {
+        console.error(e);
+        res.status(400).send(e.message);
+    }
+});
+
+router.put('/:id/messages/read', async (req, res) => {
+    try {
+        await Message.updateMany(
+            { chat: req.params.id },
+            { $addToSet: { readBy: req.session.user._id } },
+        );
         res.sendStatus(204);
     } catch (e) {
         console.error(e);

@@ -130,6 +130,7 @@ const updateTyping = (chatId) => {
 
 export {
     addChatMessage,
+    createMessageHtml,
     submitMessage,
     updateTyping,
 };

@@ -37,8 +37,10 @@ html(lang="en")
             i.fas.fa-search
           a(href="/notifications")
             i.fas.fa-bell
+            span#notifications-badge 0
           a(href="/inbox")
             i.fas.fa-envelope
+            span#messages-badge 0
           a(href="/profile")
             i.fas.fa-user
           a(href="/logout")
@@ -52,5 +54,6 @@ html(lang="en")
           block content
 
         .d-none.d-md-block.col-md-2.col-lg-4
-          span third column
+
+    #notification-list
 

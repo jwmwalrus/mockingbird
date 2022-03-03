@@ -1,6 +1,7 @@
 import { scrollIntoView } from './lib/util.js';
 import { addChatMessage, submitMessage, updateTyping } from './lib/chats.js';
 import { getOtherChatUsers } from './lib/inbox.js';
+import { refreshBadge } from './lib/notifications.js';
 import socket from './lib/socket.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -94,6 +95,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelector('.chat-container').style.visibility = 'visible';
         // scrollIntoView(['.message:last-child', '.input-textbox']);
         scrollIntoView('.message:last-child');
+
+        const res2 = await fetch(`/api/chats/${chatId}/messages/read`, { method: 'PUT' });
+        if (!res2.ok) {
+            const msg = await res2.text();
+            throw new Error(`${res2.statusText} - ${msg}`);
+        }
+        refreshBadge('chats');
     } catch (e) {
         console.error(e);
     }

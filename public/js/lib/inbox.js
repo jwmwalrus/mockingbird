@@ -61,6 +61,9 @@ const createChatHtml = (chatData) => {
 
     const chat = document.createElement('a');
     chat.classList.add('results-list-item');
+    if (chatData.latestMessage && !chatData.latestMessage.readBy.includes(getUserLoggedIn()._id)) {
+        chat.classList.add('active');
+    }
     chat.href = `/inbox/${chatData._id}`;
     chat.appendChild(getChatImageHtml(getOtherChatUsers(chatData.users)));
     chat.appendChild(details);
@@ -87,6 +90,7 @@ const outputChatList = (chatList, selector) => {
 };
 
 export {
+    createChatHtml,
     getOtherChatUsers,
     outputChatList,
 };

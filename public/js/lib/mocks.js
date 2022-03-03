@@ -1,4 +1,5 @@
 import { timeElapsed, getUserLoggedIn } from './util.js';
+import socket from './socket.js';
 
 const handleLikes = async (btn, mockData) => {
     try {
@@ -18,6 +19,7 @@ const handleLikes = async (btn, mockData) => {
         const user = getUserLoggedIn();
         if (user && mock.likes.includes(user._id)) {
             btn.classList.add('active');
+            socket.emit('new-notification', mockData.mockedBy);
         } else {
             btn.classList.remove('active');
         }
@@ -44,6 +46,7 @@ const handleRemocks = async (btn, mockData) => {
         const user = getUserLoggedIn();
         if (user && mock.remockUsers.includes(user._id)) {
             btn.classList.add('active');
+            socket.emit('new-notification', mockData.mockedBy);
         } else {
             btn.classList.remove('active');
         }
@@ -360,6 +363,7 @@ const submitMock = async (textarea, submitBtn) => {
         const newMock = await res.json();
 
         if (newMock.replyTo) {
+            socket.emit('new-notification', newMock.replyTo.mockedBy);
             window.location.reload();
             return;
         }
